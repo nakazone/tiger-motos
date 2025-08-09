@@ -30,14 +30,13 @@
   port = 3000
   publish = "frontend/build"
 
-# Build timeout configuration
+# Build processing configuration
 [build.processing.html]
   pretty_urls = true
 
-# Build hooks for submodule handling
 [build.processing.images]
   compress = true
 
-# Build hooks for submodule handling
-[build.processing.skip_processing]
-  skip_processing = false 
+# Build timeout and optimization
+[build.processing.optimization]
+  bundle = true 
