@@ -32,4 +32,8 @@
 
 # Build timeout configuration
 [build.processing.html]
-  pretty_urls = true 
+  pretty_urls = true
+
+# Build hooks for submodule handling
+[build.processing.images]
+  compress = true 
