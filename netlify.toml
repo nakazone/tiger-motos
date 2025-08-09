@@ -63,4 +63,8 @@
 
 # Build hooks for submodule handling
 [build.processing.hooks]
-  on_error = "echo 'Build error occurred'" 
+  on_error = "echo 'Build error occurred'"
+
+# Build hooks for submodule handling
+[build.processing.hooks]
+  on_timeout = "echo 'Build timed out'" 
