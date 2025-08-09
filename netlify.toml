@@ -39,4 +39,8 @@
 
 # Build timeout and optimization
 [build.processing.optimization]
-  bundle = true 
+  bundle = true
+
+# Build hooks for submodule handling
+[build.processing.hooks]
+  pre_build = "git submodule update --init --recursive" 
