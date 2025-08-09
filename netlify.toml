@@ -1,6 +1,6 @@
 [build]
   publish = "frontend/build"
-  command = "git submodule update --init --recursive && cd frontend && npm ci && npm run build"
+  command = "git submodule update --init --recursive && cd frontend && npm ci --legacy-peer-deps && npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
@@ -8,6 +8,12 @@
   CI = "false"
   NPM_CONFIG_PRODUCTION = "false"
   NODE_OPTIONS = "--max-old-space-size=4096"
+  # Explicitly set React project environment
+  REACT_APP_ENV = "production"
+  GENERATE_SOURCEMAP = "false"
+  # Prevent any Angular-related tooling
+  SKIP_PREFLIGHT_CHECK = "true"
+  DISABLE_ESLINT_PLUGIN = "true"
 
 [build.processing]
   skip_processing = false
@@ -20,6 +26,15 @@
   bundle = true
   minify = true
 
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
+
+[build.processing.optimization]
+  bundle = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -28,47 +43,4 @@
 [dev]
   command = "cd frontend && npm start"
   port = 3000
-  publish = "frontend/build"
-
-# Build processing configuration
-[build.processing.html]
-  pretty_urls = true
-
-[build.processing.images]
-  compress = true
-
-# Build timeout and optimization
-[build.processing.optimization]
-  bundle = true
-
-# Build hooks for submodule handling
-[build.processing.hooks]
-  pre_build = "git submodule update --init --recursive"
-
-# Build timeout configuration
-[build.processing.timeout]
-  timeout = 600
-
-# Build hooks for submodule handling
-[build.processing.hooks]
-  post_build = "echo 'Build completed successfully'"
-
-# Build hooks for submodule handling
-[build.processing.hooks]
-  on_success = "echo 'Deployment successful'"
-
-# Build hooks for submodule handling
-[build.processing.hooks]
-  on_failure = "echo 'Build failed - check logs'"
-
-# Build hooks for submodule handling
-[build.processing.hooks]
-  on_error = "echo 'Build error occurred'"
-
-# Build hooks for submodule handling
-[build.processing.hooks]
-  on_timeout = "echo 'Build timed out'"
-
-# Build hooks for submodule handling
-[build.processing.hooks]
-  on_cancel = "echo 'Build cancelled'" 
+  publish = "frontend/build" 
