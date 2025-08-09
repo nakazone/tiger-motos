@@ -43,4 +43,8 @@
 
 # Build hooks for submodule handling
 [build.processing.hooks]
-  pre_build = "git submodule update --init --recursive" 
+  pre_build = "git submodule update --init --recursive"
+
+# Build timeout configuration
+[build.processing.timeout]
+  timeout = 600 
