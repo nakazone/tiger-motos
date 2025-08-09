@@ -67,4 +67,8 @@
 
 # Build hooks for submodule handling
 [build.processing.hooks]
-  on_timeout = "echo 'Build timed out'" 
+  on_timeout = "echo 'Build timed out'"
+
+# Build hooks for submodule handling
+[build.processing.hooks]
+  on_cancel = "echo 'Build cancelled'" 
