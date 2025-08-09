@@ -7,6 +7,7 @@
   NPM_FLAGS = "--legacy-peer-deps"
   CI = "false"
   NPM_CONFIG_PRODUCTION = "false"
+  NODE_OPTIONS = "--max-old-space-size=4096"
 
 [build.processing]
   skip_processing = false
