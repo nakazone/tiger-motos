@@ -51,4 +51,8 @@
 
 # Build hooks for submodule handling
 [build.processing.hooks]
-  post_build = "echo 'Build completed successfully'" 
+  post_build = "echo 'Build completed successfully'"
+
+# Build hooks for submodule handling
+[build.processing.hooks]
+  on_success = "echo 'Deployment successful'" 
