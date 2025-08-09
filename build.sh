@@ -3,10 +3,6 @@ set -e
 
 echo "🚀 Starting Tiger Motos build process..."
 
-# Update git submodules
-echo "📦 Updating git submodules..."
-git submodule update --init --recursive
-
 # Navigate to frontend directory
 cd frontend
 
