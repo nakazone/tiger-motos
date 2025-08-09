@@ -59,4 +59,8 @@
 
 # Build hooks for submodule handling
 [build.processing.hooks]
-  on_failure = "echo 'Build failed - check logs'" 
+  on_failure = "echo 'Build failed - check logs'"
+
+# Build hooks for submodule handling
+[build.processing.hooks]
+  on_error = "echo 'Build error occurred'" 
