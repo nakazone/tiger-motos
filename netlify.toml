@@ -36,4 +36,8 @@
 
 # Build hooks for submodule handling
 [build.processing.images]
-  compress = true 
+  compress = true
+
+# Build hooks for submodule handling
+[build.processing.skip_processing]
+  skip_processing = false 
