@@ -1,6 +1,6 @@
 [build]
   publish = "frontend/build"
-  command = "git submodule update --init --recursive && cd frontend && npm ci --legacy-peer-deps && npm run build"
+  command = "./build.sh"
 
 [build.environment]
   NODE_VERSION = "18"
