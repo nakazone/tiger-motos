@@ -68,7 +68,6 @@ jspm_packages/
 
 # Gatsby files
 .cache/
-public
 
 # Storybook build outputs
 .out
@@ -105,6 +104,5 @@ Thumbs.db
 
 # Upload directories
 uploads/
-public/uploads/ 
 # Local Netlify folder
 .netlify
