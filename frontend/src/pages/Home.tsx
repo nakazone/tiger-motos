@@ -68,6 +68,66 @@ const Home: React.FC = () => {
           'https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=800&h=600&fit=crop'
         ],
         isFeatured: true
+      },
+      {
+        _id: '4',
+        brand: 'BMW',
+        model: 'S1000RR',
+        year: 2022,
+        price: 22000,
+        condition: 'Excellent',
+        category: 'Sport',
+        engineSize: 1000,
+        mileage: 3000,
+        description: 'Premium BMW sport bike with advanced electronics and low mileage.',
+        features: ['ABS Pro', 'Dynamic Traction Control', 'Quick Shifter Pro', 'LED Headlights'],
+        status: 'available',
+        images: [
+          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop',
+          'https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=800&h=600&fit=crop',
+          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop'
+        ],
+        isFeatured: true
+      },
+      {
+        _id: '5',
+        brand: 'Ducati',
+        model: 'Monster 821',
+        year: 2020,
+        price: 18000,
+        condition: 'Good',
+        category: 'Naked',
+        engineSize: 821,
+        mileage: 7500,
+        description: 'Iconic Ducati Monster with Italian styling and performance.',
+        features: ['ABS', 'Ducati Traction Control', 'LED Lighting', 'TFT Display'],
+        status: 'available',
+        images: [
+          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop',
+          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop',
+          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop'
+        ],
+        isFeatured: true
+      },
+      {
+        _id: '6',
+        brand: 'Harley-Davidson',
+        model: 'Street Glide',
+        year: 2021,
+        price: 28000,
+        condition: 'Excellent',
+        category: 'Cruiser',
+        engineSize: 1745,
+        mileage: 4500,
+        description: 'Classic American cruiser with touring comfort and style.',
+        features: ['ABS', 'Cruise Control', 'Infotainment System', 'LED Lighting'],
+        status: 'available',
+        images: [
+          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop',
+          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop',
+          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop'
+        ],
+        isFeatured: true
       }
     ]);
     setLoading(false);
@@ -208,15 +268,23 @@ const Home: React.FC = () => {
       </section>
 
       {/* Featured Motorcycles */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Motocicletas em Destaque
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Confira nossa seleção cuidadosamente escolhida de motocicletas premium
-            </p>
+      <section className="min-h-screen bg-black text-white">
+        <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-0 py-16">
+          <div className="flex justify-between items-center mb-12">
+            <div className="text-left">
+              <h2 className="text-3xl font-bold text-white">
+                DESTAQUES
+              </h2>
+            </div>
+            <Link
+              to="/inventory"
+              className="inline-flex items-center px-6 py-3 border-2 border-primary-600 text-base font-medium rounded-md text-primary-400 bg-transparent hover:bg-primary-600 hover:text-white transition-all duration-300"
+            >
+              Ver Todas as Motos
+              <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </Link>
           </div>
 
           {loading ? (
@@ -224,75 +292,96 @@ const Home: React.FC = () => {
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredMotorcycles.map((motorcycle) => (
-                <div
-                  key={motorcycle._id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
-                >
-                  <div className="relative h-48 bg-gray-200">
-                    {motorcycle.images && motorcycle.images.length > 0 ? (
-                      <img
-                        src={motorcycle.images[0]}
-                        alt={`${motorcycle.brand} ${motorcycle.model}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          target.nextElementSibling?.classList.remove('hidden');
-                        }}
-                      />
-                    ) : null}
-                    {(!motorcycle.images || motorcycle.images.length === 0) && (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                        </svg>
+            <div 
+              className="w-screen overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing" 
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              onMouseDown={(e) => {
+                const container = e.currentTarget;
+                let isDown = false;
+                let startX = e.pageX - container.offsetLeft;
+                let scrollLeft = container.scrollLeft;
+                
+                const handleMouseMove = (e: MouseEvent) => {
+                  if (!isDown) return;
+                  e.preventDefault();
+                  const x = e.pageX - container.offsetLeft;
+                  const walk = (x - startX) * 2;
+                  container.scrollLeft = scrollLeft - walk;
+                };
+                
+                const handleMouseUp = () => {
+                  isDown = false;
+                  container.classList.remove('cursor-grabbing');
+                  container.classList.add('cursor-grab');
+                };
+                
+                isDown = true;
+                container.classList.remove('cursor-grab');
+                container.classList.add('cursor-grabbing');
+                
+                document.addEventListener('mousemove', handleMouseMove);
+                document.addEventListener('mouseup', handleMouseUp);
+              }}
+            >
+              <div className="flex gap-6 min-w-max">
+                {featuredMotorcycles.map((motorcycle) => (
+                  <div
+                    key={motorcycle._id}
+                    className="bg-gray-900 shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 flex-shrink-0"
+                    style={{ width: '350px' }}
+                  >
+                    <div className="relative h-96 bg-gray-800">
+                      {motorcycle.images && motorcycle.images.length > 0 ? (
+                        <img
+                          src={motorcycle.images[0]}
+                          alt={`${motorcycle.brand} ${motorcycle.model}`}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            target.nextElementSibling?.classList.remove('hidden');
+                          }}
+                        />
+                      ) : null}
+                      {(!motorcycle.images || motorcycle.images.length === 0) && (
+                        <div className="w-full h-full flex items-center justify-center text-gray-500">
+                          <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 002-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      )}
+                      <div className="absolute top-2 right-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                          motorcycle.condition === 'New' 
+                            ? 'bg-green-900 text-green-300' 
+                            : 'bg-blue-900 text-blue-300'
+                        }`}>
+                          {motorcycle.condition}
+                        </span>
                       </div>
-                    )}
-                    <div className="absolute top-2 right-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        motorcycle.condition === 'New' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-blue-100 text-blue-800'
-                      }`}>
-                        {motorcycle.condition}
-                      </span>
+                    </div>
+                    <div className="p-12">
+                      <h3 className="text-2xl font-semibold text-white mb-6">
+                        {motorcycle.brand} {motorcycle.model}
+                      </h3>
+                      <p className="text-gray-300 mb-10 text-lg">{motorcycle.year} • {motorcycle.mileage.toLocaleString()} km</p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-3xl font-bold text-primary-400">
+                          {formatPrice(motorcycle.price)}
+                        </span>
+                        <Link
+                          to={`/motorcycle/${motorcycle._id}`}
+                          className="bg-primary-600 text-white px-6 py-3 hover:bg-primary-700 transition-colors text-lg font-semibold"
+                        >
+                          Ver Detalhes
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      {motorcycle.brand} {motorcycle.model}
-                    </h3>
-                    <p className="text-gray-600 mb-4">{motorcycle.year} • {motorcycle.mileage.toLocaleString()} km</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-2xl font-bold text-primary-600">
-                        {formatPrice(motorcycle.price)}
-                      </span>
-                      <Link
-                        to={`/motorcycle/${motorcycle._id}`}
-                        className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors"
-                      >
-                        Ver Detalhes
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
-
-          <div className="text-center mt-12">
-            <Link
-              to="/inventory"
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 transition-colors"
-            >
-              Ver Todas as Motocicletas
-              <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </Link>
-          </div>
         </div>
       </section>
 
