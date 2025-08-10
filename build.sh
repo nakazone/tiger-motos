@@ -6,9 +6,9 @@ echo "🚀 Starting Tiger Motos build process..."
 # Navigate to frontend directory
 cd frontend
 
-# Clean install dependencies
+# Install dependencies
 echo "📥 Installing dependencies..."
-npm ci --legacy-peer-deps
+npm install --legacy-peer-deps
 
 # Build the React application
 echo "🔨 Building React application..."
