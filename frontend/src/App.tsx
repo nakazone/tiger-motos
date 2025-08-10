@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import WhatsAppChat from './components/WhatsAppChat';
 import Home from './pages/Home';
 import Inventory from './pages/Inventory';
 import MotorcycleDetail from './pages/MotorcycleDetail';
@@ -39,6 +40,7 @@ function App() {
             </Routes>
           </main>
           <Footer />
+          <WhatsAppChat />
         </div>
       </Router>
     </AuthProvider>
