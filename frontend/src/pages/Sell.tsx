@@ -54,10 +54,19 @@ const Sell: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">Quero Vender Minha Moto</h1>
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-0 py-16">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-12">
+          <div className="text-left">
+            <h1 className="text-3xl font-bold text-white">
+              QUERO VENDER
+            </h1>
+          </div>
+        </div>
+
+        <div className="bg-gray-900 rounded-lg shadow-lg p-8 border border-gray-800">
+          <h2 className="text-2xl font-bold text-white mb-6">Venda Sua Motocicleta</h2>
           
           <div className="mb-8">
             <p className="text-gray-700 mb-4">

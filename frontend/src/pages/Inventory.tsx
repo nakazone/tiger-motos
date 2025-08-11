@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Motorcycle } from '../types';
 
 const Inventory: React.FC = () => {
@@ -147,18 +148,27 @@ const Inventory: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Filter Section with Dark Gradient Background */}
-        <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-lg p-6 mb-8 shadow-xl">
-          <h2 className="text-2xl font-bold text-white mb-6">Filtros</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-0 py-16">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-12">
+          <div className="text-left">
+            <h1 className="text-3xl font-bold text-white">
+              NOSSO ESTOQUE
+            </h1>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="bg-gray-900 rounded-lg p-8 mb-12 border border-gray-800">
+          <h2 className="text-xl font-semibold text-white mb-6">Filtros</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Marca</label>
               <select
                 value={filters.brand}
                 onChange={(e) => setFilters({...filters, brand: e.target.value})}
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="">Todas as marcas</option>
                 <option value="Honda">Honda</option>
@@ -175,7 +185,7 @@ const Inventory: React.FC = () => {
               <select
                 value={filters.category}
                 onChange={(e) => setFilters({...filters, category: e.target.value})}
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="">Todas as categorias</option>
                 <option value="Sport">Sport</option>
@@ -215,42 +225,85 @@ const Inventory: React.FC = () => {
             </div>
           </div>
         </div>
-
-        <h1 className="text-3xl font-bold text-white mb-8">Inventário de Motocicletas</h1>
         
         {motorcycles.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-400 text-lg">Nenhuma motocicleta disponível no momento.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {motorcycles.map((motorcycle) => (
-              <div key={motorcycle._id} className="bg-gray-900 rounded-lg shadow-xl overflow-hidden border border-gray-700 hover:border-gray-600 transition-colors">
-                {motorcycle.images && motorcycle.images.length > 0 && (
-                  <img
-                    src={motorcycle.images[0]}
-                    alt={motorcycle.brand + ' ' + motorcycle.model}
-                    className="w-full h-48 object-cover"
-                  />
-                )}
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">
-                    {motorcycle.brand} {motorcycle.model}
-                  </h3>
-                  <p className="text-gray-300 mb-2">{motorcycle.year}</p>
-                  <p className="text-2xl font-bold text-blue-400">R$ {motorcycle.price.toLocaleString('pt-BR')}</p>
-                  <p className="text-sm text-gray-400 mt-2">{motorcycle.condition}</p>
-                  <div className="mt-3">
-                    <span className="inline-block bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded mr-2 mb-2">
-                      {motorcycle.category}
-                    </span>
-                    <span className="inline-block bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded mr-2 mb-2">
-                      {motorcycle.engineSize}cc
-                    </span>
+          <div className="w-screen overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing" 
+               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+               onMouseDown={(e) => {
+                 const container = e.currentTarget;
+                 let isDown = false;
+                 let startX = e.pageX - container.offsetLeft;
+                 let scrollLeft = container.scrollLeft;
+                 
+                 const handleMouseMove = (e: MouseEvent) => {
+                   if (!isDown) return;
+                   e.preventDefault();
+                   const x = e.pageX - container.offsetLeft;
+                   const walk = (x - startX) * 2;
+                   container.scrollLeft = scrollLeft - walk;
+                 };
+                 
+                 const handleMouseUp = () => {
+                   isDown = false;
+                   container.classList.remove('cursor-grabbing');
+                   container.classList.add('cursor-grab');
+                 };
+                 
+                 isDown = true;
+                 container.classList.remove('cursor-grab');
+                 container.classList.add('cursor-grabbing');
+                 
+                 document.addEventListener('mousemove', handleMouseMove);
+                 document.addEventListener('mouseup', handleMouseUp);
+               }}>
+            <div className="flex gap-6 min-w-max">
+              {motorcycles.map((motorcycle) => (
+                <div key={motorcycle._id} className="bg-gray-900 shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 flex-shrink-0" style={{ width: '350px' }}>
+                  <div className="relative h-96 bg-gray-800">
+                    {motorcycle.images && motorcycle.images.length > 0 && (
+                      <img
+                        src={motorcycle.images[0]}
+                        alt={motorcycle.brand + ' ' + motorcycle.model}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    <div className="absolute top-2 right-2">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        motorcycle.condition === 'New' 
+                          ? 'bg-green-900 text-green-300' 
+                          : 'bg-blue-900 text-blue-300'
+                      }`}>
+                        {motorcycle.condition}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-12">
+                    <h3 className="text-2xl font-semibold text-white mb-6">
+                      {motorcycle.brand} {motorcycle.model}
+                    </h3>
+                    <p className="text-gray-300 mb-10 text-lg">{motorcycle.year} • {motorcycle.mileage.toLocaleString()} km</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-3xl font-bold text-primary-400">
+                        {new Intl.NumberFormat('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        }).format(motorcycle.price)}
+                      </span>
+                      <Link
+                        to={`/motorcycle/${motorcycle._id}`}
+                        className="bg-primary-600 text-white px-6 py-3 hover:bg-primary-700 transition-colors text-lg font-semibold"
+                      >
+                        Ver Detalhes
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
       </div>

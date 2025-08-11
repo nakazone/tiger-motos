@@ -43,9 +43,18 @@ const MotorcycleDetail: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-0 py-16">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-12">
+          <div className="text-left">
+            <h1 className="text-3xl font-bold text-white">
+              DETALHES DA MOTO
+            </h1>
+          </div>
+        </div>
+
+        <div className="bg-gray-900 rounded-lg shadow-lg overflow-hidden border border-gray-800">
           {motorcycle.images && motorcycle.images.length > 0 && (
             <div>
               {/* Main Image */}
