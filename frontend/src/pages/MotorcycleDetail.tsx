@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motorcycleAPI } from '../services/api';
+import { useMotorcycles } from '../contexts/MotorcycleContext';
 import { Motorcycle } from '../types';
 
 const MotorcycleDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { getMotorcycleById, motorcycles } = useMotorcycles();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [motorcycle, setMotorcycle] = useState<Motorcycle | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(0);
   const [relatedMotorcycles, setRelatedMotorcycles] = useState<Motorcycle[]>([]);
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -18,79 +18,26 @@ const MotorcycleDetail: React.FC = () => {
   const [showWhatsAppChat, setShowWhatsAppChat] = useState(false);
 
   useEffect(() => {
-    const fetchMotorcycle = async () => {
-      if (!id) return;
+    if (id) {
+      const foundMotorcycle = getMotorcycleById(id);
+      setMotorcycle(foundMotorcycle || null);
+      console.log('MotorcycleDetail: Found motorcycle:', foundMotorcycle);
+      console.log('MotorcycleDetail: Motorcycle images:', foundMotorcycle?.images);
+      console.log('MotorcycleDetail: Image count:', foundMotorcycle?.images?.length);
       
-      try {
-        // Use sample data for now since backend is having issues
-        const sampleMotorcycle: Motorcycle = {
-          _id: id,
-          brand: 'Honda',
-          model: 'CBR600RR',
-          year: 2020,
-          price: 8500,
-          condition: 'Excellent',
-          category: 'Sport',
-          engineSize: 600,
-          mileage: 5000,
-          description: 'Esta Honda CBR600RR em excelente estado é perfeita para pilotos que buscam performance e confiabilidade. Com apenas 5.000 km, a moto mantém todas as suas características originais e oferece uma experiência de pilotagem excepcional. Equipada com tecnologia de ponta e design aerodinâmico, é ideal tanto para uso urbano quanto para pista.',
-          features: ['ABS', 'LED Headlights', 'Digital Display', 'Traction Control', 'Quick Shifter', 'Adjustable Suspension', 'Sport Riding Position', 'High-Performance Brakes'],
-          status: 'available',
-          images: [
-            'https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=800&h=600&fit=crop',
-            'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop',
-            'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop',
-            'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop'
-          ],
-          isFeatured: true
-        };
-        
-        setMotorcycle(sampleMotorcycle);
-        
-        // Set related motorcycles
-        setRelatedMotorcycles([
-          {
-            _id: '2',
-            brand: 'Yamaha',
-            model: 'YZF-R1',
-            year: 2021,
-            price: 15000,
-            condition: 'Good',
-            category: 'Sport',
-            engineSize: 1000,
-            mileage: 8000,
-            description: 'High-performance sport bike in good condition.',
-            features: ['ABS', 'Traction Control', 'Quick Shifter'],
-            status: 'available',
-            images: ['https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop'],
-            isFeatured: true
-          },
-          {
-            _id: '3',
-            brand: 'Kawasaki',
-            model: 'Ninja 650',
-            year: 2019,
-            price: 6500,
-            condition: 'Good',
-            category: 'Sport',
-            engineSize: 650,
-            mileage: 12000,
-            description: 'Great beginner-friendly sport bike.',
-            features: ['ABS', 'Comfortable Riding Position'],
-            status: 'available',
-            images: ['https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop'],
-            isFeatured: true
-          }
-        ]);
-      } catch (error) {
-        console.error('Error fetching motorcycle:', error);
-      } finally {
-        setLoading(false);
+      if (foundMotorcycle) {
+        // Set related motorcycles (similar category, different brand)
+        const related = motorcycles
+          .filter(m => m._id !== id && m.category === foundMotorcycle.category)
+          .slice(0, 3);
+        setRelatedMotorcycles(related);
       }
-    };
+    }
+  }, [id, getMotorcycleById, motorcycles]);
 
-    fetchMotorcycle();
-  }, [id]);
+  console.log('MotorcycleDetail: Current motorcycle:', motorcycle);
+  console.log('MotorcycleDetail: Current image index:', currentImageIndex);
+  console.log('MotorcycleDetail: Available images:', motorcycle?.images);
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,14 +52,6 @@ const MotorcycleDetail: React.FC = () => {
     const whatsappUrl = `https://wa.me/5511999999999?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="text-xl text-white">Carregando detalhes da moto...</div>
-      </div>
-    );
-  }
 
   if (!motorcycle) {
     return (
@@ -133,60 +72,142 @@ const MotorcycleDetail: React.FC = () => {
           <p className="text-xl text-gray-300">{motorcycle.year} • {motorcycle.mileage.toLocaleString()} km</p>
         </div>
 
+        {/* Debug Info */}
+        <div className="mb-6 p-4 bg-gray-800 rounded-lg border border-gray-700">
+          <h3 className="text-sm font-medium text-white mb-2">Debug Info:</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-300">
+            <div>
+              <p>Motorcycle ID: {id}</p>
+              <p>Motorcycle found: {motorcycle ? 'Yes' : 'No'}</p>
+              <p>Raw images count: {motorcycle?.images?.length || 0}</p>
+              <p>Processed images count: {motorcycle?.images?.length || 0}</p>
+            </div>
+            <div>
+              <button
+                onClick={() => {
+                  console.log('=== MOTORCYCLE DETAIL DEBUG ===');
+                  console.log('Motorcycle:', motorcycle);
+                  console.log('Raw images:', motorcycle?.images);
+                  console.log('Current image index:', currentImageIndex);
+                  console.log('================================');
+                }}
+                className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
+              >
+                🐛 Log Debug
+              </button>
+            </div>
+            <div>
+              <button
+                onClick={() => {
+                  if (motorcycle) {
+                    // Add a test image to this motorcycle
+                    const testImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzMyIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2Ij5UZXN0IEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+                    const updatedMotorcycle = {
+                      ...motorcycle,
+                      images: [...(motorcycle.images || []), testImage]
+                    };
+                    console.log('Adding test image to motorcycle:', updatedMotorcycle);
+                    // Force a re-render by updating state
+                    setMotorcycle(updatedMotorcycle);
+                  }
+                }}
+                className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
+              >
+                🧪 Add Test Image
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Photo Gallery */}
           <div className="lg:col-span-2">
             <div className="bg-gray-900 rounded-lg overflow-hidden">
               {/* Main Image */}
               <div className="relative h-96 bg-gray-800">
-                <img
-                  src={motorcycle.images[selectedImage]}
-                  alt={`${motorcycle.brand} ${motorcycle.model}`}
-                  className="w-full h-full object-cover"
-                />
-                {/* Navigation arrows */}
-                {motorcycle.images.length > 1 && (
+                {motorcycle.images && motorcycle.images.length > 0 ? (
                   <>
-                    <button
-                      onClick={() => setSelectedImage(prev => prev === 0 ? motorcycle.images.length - 1 : prev - 1)}
-                      className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75 transition-all"
-                    >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => setSelectedImage(prev => prev === motorcycle.images.length - 1 ? 0 : prev + 1)}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75 transition-all"
-                    >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
+                    <div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs z-10">
+                      Debug: {motorcycle.images.length} images, current: {currentImageIndex}
+                    </div>
+                    <img
+                      src={motorcycle.images[currentImageIndex]}
+                      alt={`${motorcycle.brand} ${motorcycle.model}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.error('Image failed to load:', motorcycle.images[currentImageIndex]);
+                        console.error('Error event:', e);
+                      }}
+                      onLoad={() => {
+                        console.log('Image loaded successfully:', motorcycle.images[currentImageIndex]);
+                      }}
+                    />
+                    {motorcycle.images.length > 1 && (
+                      <>
+                        <button
+                          onClick={() => setCurrentImageIndex(prev => prev === 0 ? motorcycle.images.length - 1 : prev - 1)}
+                          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75 transition-all"
+                        >
+                          ‹
+                        </button>
+                        <button
+                          onClick={() => setCurrentImageIndex(prev => prev === motorcycle.images.length - 1 ? 0 : prev + 1)}
+                          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75 transition-all"
+                        >
+                          ›
+                        </button>
+                      </>
+                    )}
                   </>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="text-center">
+                      <span className="text-6xl text-gray-400 mb-4">🏍️</span>
+                      <p className="text-gray-400 text-lg">Nenhuma foto disponível</p>
+                      <p className="text-gray-500 text-sm">As fotos aparecem aqui quando adicionadas pelo admin</p>
+                      <div className="mt-4 p-2 bg-gray-700 rounded text-xs text-gray-300">
+                        Debug: motorcycle.images = {JSON.stringify(motorcycle.images)}
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
               
-              {/* Thumbnail Gallery */}
-              {motorcycle.images.length > 1 && (
-                <div className="p-6 bg-gray-800">
-                  <h3 className="text-lg font-semibold text-white mb-4">Galeria de Fotos</h3>
-                  <div className="flex space-x-3 overflow-x-auto">
-                    {motorcycle.images.map((image, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImage(index)}
-                        className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all ${
-                          selectedImage === index ? 'border-[#e94925]' : 'border-gray-600 hover:border-gray-500'
-                        }`}
-                      >
-                        <img
-                          src={image}
-                          alt={`${motorcycle.brand} ${motorcycle.model} - Foto ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </button>
-                    ))}
+              {/* Thumbnail Navigation */}
+              {motorcycle.images && motorcycle.images.length > 0 ? (
+                <div className="flex space-x-2 mt-4 overflow-x-auto">
+                  <div className="mb-2 text-xs text-gray-500">
+                    Debug: {motorcycle.images.length} thumbnails available
+                  </div>
+                  {motorcycle.images.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all ${
+                        currentImageIndex === index ? 'border-[#e94925]' : 'border-gray-600 hover:border-gray-500'
+                      }`}
+                    >
+                      <img
+                        src={image}
+                        alt={`${motorcycle.brand} ${motorcycle.model} - Foto ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          console.error(`Thumbnail ${index} failed to load:`, image);
+                        }}
+                      />
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="mt-4 p-4 bg-gray-100 rounded-lg text-center">
+                  <p className="text-gray-500 text-sm">
+                    📸 Nenhuma foto disponível para esta motocicleta
+                  </p>
+                  <p className="text-gray-400 text-xs mt-1">
+                    As fotos aparecem aqui quando adicionadas pelo painel administrativo
+                  </p>
+                  <div className="mt-2 p-2 bg-gray-200 rounded text-xs text-gray-600">
+                    Debug: motorcycle.images = {JSON.stringify(motorcycle.images)}
                   </div>
                 </div>
               )}

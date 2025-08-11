@@ -1,137 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Motorcycle } from '../types';
+import { useMotorcycles } from '../contexts/MotorcycleContext';
 
 const Home: React.FC = () => {
-  const [featuredMotorcycles, setFeaturedMotorcycles] = useState<Motorcycle[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Use sample data directly since backend is having issues
-    setFeaturedMotorcycles([
-      {
-        _id: '1',
-        brand: 'Honda',
-        model: 'CBR600RR',
-        year: 2020,
-        price: 8500,
-        condition: 'Excellent',
-        category: 'Sport',
-        engineSize: 600,
-        mileage: 5000,
-        description: 'Excellent condition sport bike with low mileage.',
-        features: ['ABS', 'LED Headlights', 'Digital Display'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop'
-        ],
-        isFeatured: true
-      },
-      {
-        _id: '2',
-        brand: 'Yamaha',
-        model: 'YZF-R1',
-        year: 2021,
-        price: 15000,
-        condition: 'Good',
-        category: 'Sport',
-        engineSize: 1000,
-        mileage: 8000,
-        description: 'High-performance sport bike in good condition.',
-        features: ['ABS', 'Traction Control', 'Quick Shifter'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop&crop=face',
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop&crop=entropy'
-        ],
-        isFeatured: true
-      },
-      {
-        _id: '3',
-        brand: 'Kawasaki',
-        model: 'Ninja 650',
-        year: 2019,
-        price: 6500,
-        condition: 'Good',
-        category: 'Sport',
-        engineSize: 650,
-        mileage: 12000,
-        description: 'Great beginner-friendly sport bike.',
-        features: ['ABS', 'Comfortable Riding Position'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=800&h=600&fit=crop'
-        ],
-        isFeatured: true
-      },
-      {
-        _id: '4',
-        brand: 'BMW',
-        model: 'S1000RR',
-        year: 2022,
-        price: 22000,
-        condition: 'Excellent',
-        category: 'Sport',
-        engineSize: 1000,
-        mileage: 3000,
-        description: 'Premium BMW sport bike with advanced electronics and low mileage.',
-        features: ['ABS Pro', 'Dynamic Traction Control', 'Quick Shifter Pro', 'LED Headlights'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop'
-        ],
-        isFeatured: true
-      },
-      {
-        _id: '5',
-        brand: 'Ducati',
-        model: 'Monster 821',
-        year: 2020,
-        price: 18000,
-        condition: 'Good',
-        category: 'Naked',
-        engineSize: 821,
-        mileage: 7500,
-        description: 'Iconic Ducati Monster with Italian styling and performance.',
-        features: ['ABS', 'Ducati Traction Control', 'LED Lighting', 'TFT Display'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop'
-        ],
-        isFeatured: true
-      },
-      {
-        _id: '6',
-        brand: 'Harley-Davidson',
-        model: 'Street Glide',
-        year: 2021,
-        price: 28000,
-        condition: 'Excellent',
-        category: 'Cruiser',
-        engineSize: 1745,
-        mileage: 4500,
-        description: 'Classic American cruiser with touring comfort and style.',
-        features: ['ABS', 'Cruise Control', 'Infotainment System', 'LED Lighting'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop'
-        ],
-        isFeatured: true
-      }
-    ]);
-    setLoading(false);
-  }, []);
+  const { featuredMotorcycles, loading, coverPhotos } = useMotorcycles();
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -269,8 +145,22 @@ const Home: React.FC = () => {
       </section>
 
       {/* Featured Motorcycles */}
-      <section className="min-h-screen bg-black text-white">
-        <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-0 py-16">
+      <section className="min-h-screen bg-black text-white relative overflow-hidden">
+        {/* Background - Use first featured motorcycle image or fallback */}
+        {featuredMotorcycles.length > 0 && featuredMotorcycles[0].images && featuredMotorcycles[0].images.length > 0 ? (
+          <div className="absolute inset-0 z-0">
+            <img
+              src={featuredMotorcycles[0].images[0]}
+              alt="Featured Section Background"
+              className="w-full h-full object-cover opacity-20"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+          </div>
+        ) : (
+          <div className="absolute inset-0 z-0 bg-gradient-to-br from-gray-900 to-black"></div>
+        )}
+        
+        <div className="relative z-10 max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-0 py-16">
           <div className="flex justify-between items-center mb-12">
             <div className="text-left">
               <h2 className="text-5xl font-bold text-white">
@@ -290,9 +180,9 @@ const Home: React.FC = () => {
 
           {loading ? (
             <div className="flex justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#e94925]"></div>
             </div>
-          ) : (
+          ) : featuredMotorcycles.length > 0 ? (
             <div 
               className="w-screen overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing" 
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -378,6 +268,18 @@ const Home: React.FC = () => {
                   </div>
                 ))}
               </div>
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="text-6xl text-gray-400 mb-4">🏍️</div>
+              <h3 className="text-2xl font-semibold text-gray-300 mb-2">Nenhuma moto em destaque</h3>
+              <p className="text-gray-500 mb-6">Adicione motocicletas marcadas como "featured" no painel admin</p>
+              <Link
+                to="/inventory"
+                className="inline-flex items-center px-6 py-3 bg-[#e94925] text-white font-semibold rounded hover:bg-[#d13d1f] transition-colors"
+              >
+                Ver Inventário Completo
+              </Link>
             </div>
           )}
         </div>

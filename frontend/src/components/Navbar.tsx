@@ -18,7 +18,6 @@ const Navbar: React.FC = () => {
 
   const adminNavigation = [
     { name: 'Painel', href: '/admin/dashboard' },
-    { name: 'Inventário', href: '/admin/inventory' },
   ];
 
   const handleLogout = () => {

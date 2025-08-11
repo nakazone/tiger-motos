@@ -1,143 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Motorcycle } from '../types';
+import { useMotorcycles } from '../contexts/MotorcycleContext';
 
 const Inventory: React.FC = () => {
-  const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { motorcycles, loading, getMotorcyclesByFilters, forceRefresh } = useMotorcycles();
   const [filters, setFilters] = useState({
     brand: '',
     category: '',
-    priceRange: '',
-    condition: ''
+    condition: '',
+    priceRange: ''
   });
 
+  // Monitor motorcycles changes
   useEffect(() => {
-    // Use sample data directly since backend is having issues
-    setMotorcycles([
-      {
-        _id: '1',
-        brand: 'Honda',
-        model: 'CBR600RR',
-        year: 2020,
-        price: 8500,
-        condition: 'Excellent',
-        category: 'Sport',
-        engineSize: 600,
-        mileage: 5000,
-        description: 'Excellent condition sport bike with low mileage.',
-        features: ['ABS', 'LED Headlights', 'Digital Display'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop'
-        ],
-        isFeatured: true
-      },
-      {
-        _id: '2',
-        brand: 'Yamaha',
-        model: 'YZF-R1',
-        year: 2021,
-        price: 15000,
-        condition: 'Good',
-        category: 'Sport',
-        engineSize: 1000,
-        mileage: 8000,
-        description: 'High-performance sport bike in good condition.',
-        features: ['ABS', 'Traction Control', 'Quick Shifter'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop&crop=face',
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop&crop=entropy'
-        ],
-        isFeatured: true
-      },
-      {
-        _id: '3',
-        brand: 'Kawasaki',
-        model: 'Ninja 650',
-        year: 2019,
-        price: 6500,
-        condition: 'Good',
-        category: 'Sport',
-        engineSize: 650,
-        mileage: 12000,
-        description: 'Great beginner-friendly sport bike.',
-        features: ['ABS', 'Comfortable Riding Position'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=800&h=600&fit=crop'
-        ],
-        isFeatured: true
-      },
-      {
-        _id: '4',
-        brand: 'Ducati',
-        model: 'Panigale V4',
-        year: 2022,
-        price: 25000,
-        condition: 'Excellent',
-        category: 'Sport',
-        engineSize: 1103,
-        mileage: 3000,
-        description: 'Exotic Italian sport bike with incredible performance.',
-        features: ['ABS', 'Traction Control', 'Quick Shifter', 'Launch Control'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop'
-        ],
-        isFeatured: true
-      },
-      {
-        _id: '5',
-        brand: 'BMW',
-        model: 'S1000RR',
-        year: 2021,
-        price: 18000,
-        condition: 'Excellent',
-        category: 'Sport',
-        engineSize: 999,
-        mileage: 4500,
-        description: 'German engineering at its finest with advanced electronics.',
-        features: ['ABS', 'Traction Control', 'Quick Shifter', 'Dynamic Traction Control'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop'
-        ],
-        isFeatured: true
-      },
-      {
-        _id: '6',
-        brand: 'Harley-Davidson',
-        model: 'Street Glide',
-        year: 2020,
-        price: 22000,
-        condition: 'Good',
-        category: 'Cruiser',
-        engineSize: 1746,
-        mileage: 15000,
-        description: 'Classic American cruiser with modern amenities.',
-        features: ['ABS', 'Cruise Control', 'Infotainment System', 'LED Lighting'],
-        status: 'available',
-        images: [
-          'https://images.unsplash.com/photo-1558981403-c5f9248f5cde?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=800&h=600&fit=crop'
-        ],
-        isFeatured: true
-      }
-    ]);
-    setLoading(false);
-  }, []);
+    console.log('Inventory: motorcycles changed:', motorcycles);
+    console.log('Inventory: new count:', motorcycles.length);
+  }, [motorcycles]);
+
+  // Apply filters to motorcycles
+  const filteredMotorcycles = getMotorcyclesByFilters(filters);
+
+  console.log('Inventory page - motorcycles:', motorcycles);
+  console.log('Inventory page - motorcycles count:', motorcycles.length);
+  console.log('Inventory page - filteredMotorcycles:', filteredMotorcycles);
+  console.log('Inventory page - filteredMotorcycles count:', filteredMotorcycles.length);
+  console.log('Inventory page - loading:', loading);
+  console.log('Inventory page - filters:', filters);
 
   if (loading) {
     return (
@@ -155,6 +43,56 @@ const Inventory: React.FC = () => {
         {/* Filters */}
         <div className="bg-gray-900 rounded-lg p-8 mb-12 border border-gray-800">
           <h2 className="text-xl font-semibold text-white mb-6">Filtros</h2>
+          
+          {/* Debug Info */}
+          <div className="mb-6 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <h3 className="text-sm font-medium text-gray-300 mb-2">Debug Info:</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-gray-400">
+              <div>
+                <p>Total motorcycles: {motorcycles.length}</p>
+                <p>Filtered count: {filteredMotorcycles.length}</p>
+                <p>Loading: {loading.toString()}</p>
+              </div>
+              <div>
+                <p>Brand filter: {filters.brand || 'None'}</p>
+                <p>Category filter: {filters.category || 'None'}</p>
+                <p>Condition filter: {filters.condition || 'None'}</p>
+              </div>
+              <div>
+                <p>Price filter: {filters.priceRange || 'None'}</p>
+                <p>localStorage has data: {localStorage.getItem('tiger-motos-motorcycles') ? 'Yes' : 'No'}</p>
+              </div>
+              <div>
+                <p>Sample motorcycles:</p>
+                {motorcycles.slice(0, 3).map((m, i) => (
+                  <p key={i} className="text-xs">• {m.brand} {m.model}</p>
+                ))}
+              </div>
+            </div>
+            <div className="mt-4 flex space-x-2">
+              <button
+                onClick={() => {
+                  console.log('=== INVENTORY DEBUG ===');
+                  console.log('Current motorcycles:', motorcycles);
+                  console.log('localStorage data:', localStorage.getItem('tiger-motos-motorcycles'));
+                  console.log('=====================');
+                }}
+                className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
+              >
+                🐛 Log Debug
+              </button>
+              <button
+                onClick={() => {
+                  console.log('Force refresh triggered from Inventory');
+                  forceRefresh();
+                }}
+                className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
+              >
+                🔄 Force Refresh
+              </button>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Marca</label>
@@ -219,13 +157,13 @@ const Inventory: React.FC = () => {
           </div>
         </div>
         
-        {motorcycles.length === 0 ? (
+        {filteredMotorcycles.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-400 text-lg">Nenhuma motocicleta disponível no momento.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {motorcycles.map((motorcycle) => (
+            {filteredMotorcycles.map((motorcycle) => (
               <div key={motorcycle._id} className="bg-gray-900 shadow-lg overflow-hidden" style={{ height: '600px' }}>
                 {/* Title - Outside the image */}
                 <div className="p-6 pb-4">
