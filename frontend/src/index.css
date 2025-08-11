@@ -41,6 +41,43 @@
   user-select: none;
 }
 
+/* Mobile-specific video background and hero section improvements */
+@media (max-width: 768px) {
+  /* Ensure video background is truly full screen on mobile */
+  .hero-video {
+    min-height: 100vh !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    object-fit: cover !important;
+  }
+  
+  /* Improve hero section text visibility on mobile */
+  .hero-content {
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+  
+  /* Hide search bar completely on mobile */
+  .mobile-search {
+    display: none !important;
+  }
+  
+  /* Ensure full width on mobile */
+  .mobile-full-width {
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%);
+  }
+}
+
+/* Desktop search bar - restore original appearance */
+@media (min-width: 769px) {
+  .mobile-search {
+    display: block !important;
+    margin-top: 8rem !important; /* Restore original mt-32 */
+    padding: 2.5rem !important; /* Restore original p-10 */
+  }
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
 
 body {

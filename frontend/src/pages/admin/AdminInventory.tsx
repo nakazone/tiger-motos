@@ -70,7 +70,7 @@ const AdminInventory: React.FC = () => {
           </div>
           <Link
             to="/admin/motorcycle/new"
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
           >
             Add Motorcycle
           </Link>
@@ -90,7 +90,7 @@ const AdminInventory: React.FC = () => {
                   name="brand"
                   value={filters.brand}
                   onChange={handleFilterChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="">All Brands</option>
                   <option value="Honda">Honda</option>
@@ -111,7 +111,7 @@ const AdminInventory: React.FC = () => {
                   name="category"
                   value={filters.category}
                   onChange={handleFilterChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="">All Categories</option>
                   <option value="Sport">Sport</option>
@@ -131,7 +131,7 @@ const AdminInventory: React.FC = () => {
                   name="condition"
                   value={filters.condition}
                   onChange={handleFilterChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="">All Conditions</option>
                   <option value="Excellent">Excellent</option>
@@ -150,7 +150,7 @@ const AdminInventory: React.FC = () => {
                   name="status"
                   value={filters.status}
                   onChange={handleFilterChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="">All Status</option>
                   <option value="available">Available</option>
@@ -230,7 +230,7 @@ const AdminInventory: React.FC = () => {
                           <div className="flex space-x-2">
                             <Link
                               to={`/admin/motorcycle/${motorcycle._id}`}
-                              className="text-blue-600 hover:text-blue-900"
+                              className="text-primary-600 hover:text-primary-900"
                             >
                               Edit
                             </Link>

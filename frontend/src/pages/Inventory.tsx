@@ -149,15 +149,8 @@ const Inventory: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-0 py-16">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-12">
-          <div className="text-left">
-            <h1 className="text-3xl font-bold text-white">
-              NOSSO ESTOQUE
-            </h1>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 py-16">
+
 
         {/* Filters */}
         <div className="bg-gray-900 rounded-lg p-8 mb-12 border border-gray-800">
@@ -200,7 +193,7 @@ const Inventory: React.FC = () => {
               <select
                 value={filters.priceRange}
                 onChange={(e) => setFilters({...filters, priceRange: e.target.value})}
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="">Qualquer preço</option>
                 <option value="0-5000">Até R$ 5.000</option>
@@ -215,7 +208,7 @@ const Inventory: React.FC = () => {
               <select
                 value={filters.condition}
                 onChange={(e) => setFilters({...filters, condition: e.target.value})}
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="">Qualquer condição</option>
                 <option value="Excellent">Excelente</option>
@@ -231,79 +224,74 @@ const Inventory: React.FC = () => {
             <p className="text-gray-400 text-lg">Nenhuma motocicleta disponível no momento.</p>
           </div>
         ) : (
-          <div className="w-screen overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing" 
-               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-               onMouseDown={(e) => {
-                 const container = e.currentTarget;
-                 let isDown = false;
-                 let startX = e.pageX - container.offsetLeft;
-                 let scrollLeft = container.scrollLeft;
-                 
-                 const handleMouseMove = (e: MouseEvent) => {
-                   if (!isDown) return;
-                   e.preventDefault();
-                   const x = e.pageX - container.offsetLeft;
-                   const walk = (x - startX) * 2;
-                   container.scrollLeft = scrollLeft - walk;
-                 };
-                 
-                 const handleMouseUp = () => {
-                   isDown = false;
-                   container.classList.remove('cursor-grabbing');
-                   container.classList.add('cursor-grab');
-                 };
-                 
-                 isDown = true;
-                 container.classList.remove('cursor-grab');
-                 container.classList.add('cursor-grabbing');
-                 
-                 document.addEventListener('mousemove', handleMouseMove);
-                 document.addEventListener('mouseup', handleMouseUp);
-               }}>
-            <div className="flex gap-6 min-w-max">
-              {motorcycles.map((motorcycle) => (
-                <div key={motorcycle._id} className="bg-gray-900 shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 flex-shrink-0" style={{ width: '350px' }}>
-                  <div className="relative h-96 bg-gray-800">
-                    {motorcycle.images && motorcycle.images.length > 0 && (
-                      <img
-                        src={motorcycle.images[0]}
-                        alt={motorcycle.brand + ' ' + motorcycle.model}
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                    <div className="absolute top-2 right-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        motorcycle.condition === 'New' 
-                          ? 'bg-green-900 text-green-300' 
-                          : 'bg-blue-900 text-blue-300'
-                      }`}>
-                        {motorcycle.condition}
-                      </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {motorcycles.map((motorcycle) => (
+              <div key={motorcycle._id} className="bg-gray-900 shadow-lg overflow-hidden" style={{ height: '600px' }}>
+                {/* Title - Outside the image */}
+                <div className="p-6 pb-4">
+                  <h3 className="text-2xl font-semibold text-white mb-2">
+                    {motorcycle.brand} {motorcycle.model}
+                  </h3>
+                </div>
+                
+                {/* Cover Photo - Middle with padding */}
+                <div className="px-6 pb-6">
+                  <Link to={`/motorcycle/${motorcycle._id}`} className="block">
+                    <div className="relative h-80 bg-gray-800 rounded-lg overflow-hidden hover:opacity-90 transition-opacity cursor-pointer">
+                      {motorcycle.images && motorcycle.images.length > 0 && (
+                        <img
+                          src={motorcycle.images[0]}
+                          alt={motorcycle.brand + ' ' + motorcycle.model}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
                     </div>
-                  </div>
-                  <div className="p-12">
-                    <h3 className="text-2xl font-semibold text-white mb-6">
-                      {motorcycle.brand} {motorcycle.model}
-                    </h3>
-                    <p className="text-gray-300 mb-10 text-lg">{motorcycle.year} • {motorcycle.mileage.toLocaleString()} km</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-3xl font-bold text-primary-400">
-                        {new Intl.NumberFormat('pt-BR', {
-                          style: 'currency',
-                          currency: 'BRL',
-                        }).format(motorcycle.price)}
-                      </span>
-                      <Link
-                        to={`/motorcycle/${motorcycle._id}`}
-                        className="bg-primary-600 text-white px-6 py-3 hover:bg-primary-700 transition-colors text-lg font-semibold"
-                      >
-                        Ver Detalhes
-                      </Link>
+                  </Link>
+                </div>
+                
+                {/* Specs with Icons - Reordered */}
+                <div className="px-6 pb-6">
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="flex items-center gap-2">
+                      <img src="/marca.png" alt="Brand" className="w-5 h-5" style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }} />
+                      <span className="text-gray-300">{motorcycle.brand}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg className="w-5 h-5" fill="#e94925" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-gray-300">{motorcycle.model}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <img src="/ano.png" alt="Year" className="w-5 h-5" style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }} />
+                      <span className="text-gray-300">{motorcycle.year}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <img src="/quilometragem.png" alt="Mileage" className="w-5 h-5" style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }} />
+                      <span className="text-gray-300">{motorcycle.mileage.toLocaleString()} km</span>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+                
+                {/* Bottom - Price and Button */}
+                <div className="px-6 pb-6">
+                  <div className="flex justify-between items-center">
+                    <div className="text-2xl font-bold text-[#e94925]">
+                      {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(motorcycle.price)}
+                    </div>
+                    <Link
+                      to={`/motorcycle/${motorcycle._id}`}
+                      className="bg-[#e94925] text-white px-6 py-3 hover:bg-[#d13d1f] transition-colors text-lg font-semibold"
+                    >
+                      Ver Mais
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

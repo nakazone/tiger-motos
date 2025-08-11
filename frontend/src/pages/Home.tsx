@@ -152,7 +152,8 @@ const Home: React.FC = () => {
             muted
             playsInline
             preload="auto"
-            className="w-full h-full object-cover min-h-screen"
+            className="w-full h-full object-cover min-h-screen hero-video"
+            style={{ minHeight: '100vh', height: '100vh' }}
             poster="https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=1920&h=1080&fit=crop"
             onLoadStart={() => console.log('Video loading started')}
             onCanPlay={() => console.log('Video can play')}
@@ -177,19 +178,19 @@ const Home: React.FC = () => {
         </div>
         
         {/* Hero Content */}
-        <div className="relative z-10 text-left text-white max-w-7xl mx-auto w-full">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+        <div className="relative z-10 text-left text-white max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 hero-content">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight">
             Encontre Sua
-            <span className="block text-primary-400">Moto Perfeita</span>
+            <span className="block text-[#e94925] uppercase">MOTO PERFEITA</span>
           </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 max-w-3xl leading-relaxed">
             Descubra uma extensa coleção de motocicletas premium das melhores marcas do mundo. 
             Motos de qualidade, preços competitivos e serviço excepcional aguardam por você.
           </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-start items-start">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-start items-start">
             <Link
               to="/inventory"
-              className="group bg-primary-600 text-white px-10 py-4 font-bold text-lg hover:bg-primary-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              className="group bg-[#e94925] text-white px-6 sm:px-10 py-3 sm:py-4 font-bold text-base sm:text-lg hover:bg-[#d13d1f] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
               <span>Conheça nosso Estoque</span>
             </Link>
@@ -197,24 +198,24 @@ const Home: React.FC = () => {
               href="https://wa.me/5511999999999?text=Olá! Gostaria de saber mais sobre as motos da Tiger Motos."
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-green-500 hover:bg-green-600 text-white px-10 py-4 font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
+              className="bg-green-500 hover:bg-green-600 text-white px-6 sm:px-10 py-3 sm:py-4 font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
             >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
               </svg>
               <span>Fale Conosco</span>
             </a>
           </div>
           
-          {/* Search Bar */}
-          <div className="mt-32 bg-black bg-opacity-90 backdrop-blur-sm p-10 max-w-7xl mx-auto">
+          {/* Search Bar - Hidden on Mobile */}
+          <div className="bg-black bg-opacity-90 backdrop-blur-sm max-w-7xl mx-auto mobile-search">
             <h3 className="text-3xl font-bold text-white text-left mb-8">
               Encontre sua Moto
             </h3>
             <div className="flex flex-col md:flex-row gap-6 items-end">
               {/* Brand Filter */}
               <div className="flex-1">
-                <select className="w-full px-6 py-5 bg-white bg-opacity-10 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                <select className="w-full px-6 py-5 bg-white bg-opacity-10 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-gray-600">
                   <option value="" className="text-gray-900">Todas as marcas</option>
                   <option value="honda" className="text-gray-900">Honda</option>
                   <option value="yamaha" className="text-gray-900">Yamaha</option>
@@ -229,7 +230,7 @@ const Home: React.FC = () => {
               
               {/* Model Filter */}
               <div className="flex-1">
-                <select className="w-full px-6 py-5 bg-white bg-opacity-10 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                <select className="w-full px-6 py-5 bg-white bg-opacity-10 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-gray-600">
                   <option value="" className="text-gray-900">Todos os modelos</option>
                   <option value="cb" className="text-gray-900">CB</option>
                   <option value="cbr" className="text-gray-900">CBR</option>
@@ -247,7 +248,7 @@ const Home: React.FC = () => {
               
               {/* Price Filter */}
               <div className="flex-1">
-                <select className="w-full px-6 py-5 bg-white bg-opacity-10 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                <select className="w-full px-6 py-5 bg-white bg-opacity-10 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-gray-600">
                   <option value="" className="text-gray-900">Qualquer preço</option>
                   <option value="0-10000" className="text-gray-900">Até R$ 10.000</option>
                   <option value="10000-25000" className="text-gray-900">R$ 10.000 - R$ 25.000</option>
@@ -258,7 +259,7 @@ const Home: React.FC = () => {
               </div>
               
               {/* Search Button */}
-              <button className="bg-primary-600 hover:bg-primary-700 text-white font-bold py-5 px-12 transition-all duration-300 transform hover:scale-105">
+              <button className="bg-[#e94925] hover:bg-[#d13d1f] text-white font-bold py-5 px-12 transition-all duration-300 transform hover:scale-105">
                 Buscar Motos
               </button>
             </div>
@@ -272,16 +273,16 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-0 py-16">
           <div className="flex justify-between items-center mb-12">
             <div className="text-left">
-              <h2 className="text-3xl font-bold text-white">
+              <h2 className="text-5xl font-bold text-white">
                 DESTAQUES
               </h2>
             </div>
             <Link
               to="/inventory"
-              className="inline-flex items-center px-6 py-3 border-2 border-primary-600 text-base font-medium rounded-md text-primary-400 bg-transparent hover:bg-primary-600 hover:text-white transition-all duration-300"
+              className="inline-flex items-center px-6 py-3 text-base font-medium text-[#e94925] hover:text-[#d13d1f] transition-all duration-300"
             >
               Ver Todas as Motos
-              <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="ml-2 -mr-1 w-5 h-5 transform -rotate-45" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
             </Link>
@@ -327,10 +328,11 @@ const Home: React.FC = () => {
                 {featuredMotorcycles.map((motorcycle) => (
                   <div
                     key={motorcycle._id}
-                    className="bg-gray-900 shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 flex-shrink-0"
-                    style={{ width: '350px' }}
+                    className="group bg-gray-900 shadow-lg overflow-hidden hover:shadow-xl transition-all duration-500 flex-shrink-0 relative"
+                    style={{ width: '450px', height: '700px' }}
                   >
-                    <div className="relative h-96 bg-gray-800">
+                    {/* Full-size image container */}
+                    <div className="absolute inset-0 transition-transform duration-500 group-hover:-translate-y-1/4">
                       {motorcycle.images && motorcycle.images.length > 0 ? (
                         <img
                           src={motorcycle.images[0]}
@@ -350,28 +352,24 @@ const Home: React.FC = () => {
                           </svg>
                         </div>
                       )}
-                      <div className="absolute top-2 right-2">
-                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                          motorcycle.condition === 'New' 
-                            ? 'bg-green-900 text-green-300' 
-                            : 'bg-blue-900 text-blue-300'
-                        }`}>
-                          {motorcycle.condition}
-                        </span>
-                      </div>
                     </div>
-                    <div className="p-12">
-                      <h3 className="text-2xl font-semibold text-white mb-6">
-                        {motorcycle.brand} {motorcycle.model}
-                      </h3>
-                      <p className="text-gray-300 mb-10 text-lg">{motorcycle.year} • {motorcycle.mileage.toLocaleString()} km</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-3xl font-bold text-primary-400">
+                    
+                    {/* Model, brand and year at top left corner */}
+                    <div className="absolute top-4 left-4 bg-black/80 text-white px-3 py-2 rounded z-10">
+                      <div className="font-semibold text-lg">{motorcycle.model}</div>
+                      <div className="text-sm text-gray-300">{motorcycle.brand}</div>
+                      <div className="text-xs text-gray-400">{motorcycle.year}</div>
+                    </div>
+                    
+                    {/* Content overlay that slides up on hover */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-8 transform translate-y-full transition-transform duration-500 group-hover:translate-y-0">
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-[#e94925] mb-4">
                           {formatPrice(motorcycle.price)}
-                        </span>
+                        </div>
                         <Link
                           to={`/motorcycle/${motorcycle._id}`}
-                          className="bg-primary-600 text-white px-6 py-3 hover:bg-primary-700 transition-colors text-lg font-semibold"
+                          className="bg-[#e94925] text-white px-6 py-3 hover:bg-[#d13d1f] transition-colors text-lg font-semibold text-center"
                         >
                           Ver Detalhes
                         </Link>
@@ -399,7 +397,7 @@ const Home: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#e94925] rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
@@ -411,7 +409,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#e94925] rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
@@ -424,9 +422,9 @@ const Home: React.FC = () => {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#e94925] rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z" clipRule="evenodd" />
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">Suporte Especializado</h3>
@@ -451,13 +449,13 @@ const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/inventory"
-              className="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+              className="bg-[#e94925] text-white px-8 py-3 font-semibold hover:bg-[#d13d1f] transition-colors"
             >
-              Navegar Inventário
+              Conheça nosso Estoque
             </Link>
             <Link
               to="/contact"
-              className="border-2 border-primary-600 text-primary-400 px-8 py-3 rounded-lg font-semibold hover:bg-primary-600 hover:text-white transition-colors"
+              className="border-2 border-[#e94925] text-white px-8 py-3 font-semibold hover:bg-[#e94925] hover:text-white transition-colors"
             >
               Entre em Contato
             </Link>
