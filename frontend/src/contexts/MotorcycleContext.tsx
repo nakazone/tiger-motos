@@ -132,36 +132,29 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
 
   // Function to get full image data for display
   const getFullImageData = useCallback((imageUrl: string): string | null => {
-    console.log('getFullImageData called with:', imageUrl);
     
     // If it's a thumbnail (starts with data:image/jpeg;base64,)
     if (imageUrl.startsWith('data:image/jpeg;base64,')) {
-      console.log('This is a thumbnail, looking for full image...');
       
       // For now, return the thumbnail as the full image
       // In a real implementation, you'd store the mapping between thumbnails and full images
-      console.log('Returning thumbnail as full image');
       return imageUrl;
     }
     
     // If it's already a full image or external URL
-    console.log('This appears to be a full image or external URL');
     return imageUrl;
   }, []);
 
   // Basic CRUD operations
   const addMotorcycle = useCallback((motorcycle: Motorcycle) => {
-    console.log('Adding motorcycle:', motorcycle);
     setMotorcycles(prev => [...prev, motorcycle]);
   }, []);
 
   const updateMotorcycle = useCallback((id: string, updates: Partial<Motorcycle>) => {
-    console.log('Updating motorcycle:', id, updates);
     setMotorcycles(prev => prev.map(m => m._id === id ? { ...m, ...updates } : m));
   }, []);
 
   const deleteMotorcycle = useCallback((id: string) => {
-    console.log('Deleting motorcycle:', id);
     setMotorcycles(prev => prev.filter(m => m._id !== id));
   }, []);
 
@@ -225,13 +218,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
       const currentSize = new Blob([currentData]).size;
       const availableSpace = MAX_TOTAL_STORAGE - currentSize;
       
-      console.log('Storage check:', {
-        currentSize: (currentSize / 1024).toFixed(2) + 'KB',
-        newDataSize: (newDataSize / 1024).toFixed(2) + 'KB',
-        availableSpace: (availableSpace / 1024).toFixed(2) + 'KB',
-        willFit: newDataSize <= availableSpace
-      });
-      
       return newDataSize <= availableSpace;
     } catch (error) {
       console.error('Storage check failed:', error);
@@ -265,11 +251,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
   // Enhanced addMotorcycleWithImages with storage management
   const addMotorcycleWithImages = useCallback(async (motorcycle: Motorcycle, imageFiles: File[]): Promise<Motorcycle> => {
     try {
-      console.log('addMotorcycleWithImages called with:', { 
-        motorcycle, 
-        imageFilesCount: imageFiles.length,
-        maxImagesAllowed: MAX_IMAGES_PER_MOTORCYCLE
-      });
       
       // Check if we can add more images
       if (imageFiles.length > MAX_IMAGES_PER_MOTORCYCLE) {
@@ -279,7 +260,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
       
       // Compress and store images
       const compressedImages = await storeImagesInChunks(imageFiles);
-      console.log(`Successfully compressed ${compressedImages.length} images`);
       
       // Combine with existing images (respecting limit)
       const existingImages = motorcycle.images || [];
@@ -302,14 +282,12 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
         
         try {
           localStorage.setItem('tiger-motos-motorcycles', JSON.stringify(newList));
-          console.log('Motorcycles saved to localStorage successfully');
         } catch (error) {
           console.error('localStorage save failed:', error);
           // Try to save without images as fallback
           const motorcycleWithoutImages = { ...motorcycleWithImages, images: [] };
           const fallbackList = [...prev, motorcycleWithoutImages];
           localStorage.setItem('tiger-motos-motorcycles', JSON.stringify(fallbackList));
-          console.log('Saved motorcycle without images due to storage error');
         }
         
         return newList;
@@ -328,7 +306,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
   // Enhanced updateMotorcycleWithImages
   const updateMotorcycleWithImages = useCallback(async (id: string, updates: Partial<Motorcycle>, imageFiles: File[]): Promise<Partial<Motorcycle>> => {
     try {
-      console.log('updateMotorcycleWithImages called with:', { id, updates, imageFilesCount: imageFiles.length });
       
       const existingMotorcycle = motorcycles.find(m => m._id === id);
       if (!existingMotorcycle) {
@@ -390,24 +367,20 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
     sessionStorage.clear(); // Clear all image data
     setMotorcycles(sampleMotorcycles);
     setCoverPhotos([]);
-    console.log('MotorcycleContext: Cleared all storage and reset to sample data');
   }, []);
 
   // Function to export current data (useful for debugging)
   const exportData = useCallback(() => {
     const data = localStorage.getItem('tiger-motos-motorcycles');
-    console.log('MotorcycleContext: Current localStorage data:', data);
     return data;
   }, []);
 
   // Force refresh function to debug state issues
   const forceRefresh = useCallback(() => {
-    console.log('MotorcycleContext: Force refresh triggered');
     const savedMotorcycles = localStorage.getItem('tiger-motos-motorcycles');
     if (savedMotorcycles) {
       try {
         const parsed = JSON.parse(savedMotorcycles);
-        console.log('MotorcycleContext: Force refresh - loading from localStorage:', parsed);
         setMotorcycles(parsed);
       } catch (error) {
         console.error('MotorcycleContext: Force refresh error:', error);
@@ -425,13 +398,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
       const coverPhotosSize = coverPhotosData ? new Blob([coverPhotosData]).size : 0;
       const totalSize = motorcyclesSize + coverPhotosSize;
       
-      console.log('Storage Usage:', {
-        motorcycles: `${(motorcyclesSize / 1024).toFixed(2)} KB`,
-        coverPhotos: `${(coverPhotosSize / 1024).toFixed(2)} KB`,
-        total: `${(totalSize / 1024).toFixed(2)} KB`,
-        limit: '5-10 MB (browser dependent)'
-      });
-      
       return { motorcyclesSize, coverPhotosSize, totalSize };
     } catch (error) {
       console.error('Failed to get storage info:', error);
@@ -439,27 +405,24 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
     }
   }, []);
 
-  // Clean up old images to free space
+  // Cleanup old images if storage is getting full
   const cleanupOldImages = useCallback(() => {
-    try {
-      const storageInfo = getStorageInfo();
-      if (storageInfo.totalSize < MAX_TOTAL_STORAGE * 0.8) return; // Only cleanup if over 80% full
-      
-      console.log('Storage is getting full, cleaning up old images...');
-      
-      const updatedMotorcycles = motorcycles.map(m => ({
-        ...m,
-        images: m.images?.slice(0, 5) || [] // Keep only first 5 images
+    const { totalSize } = getStorageInfo();
+    const percentage = (totalSize / MAX_TOTAL_STORAGE) * 100;
+    
+    if (percentage > 80) {
+      // Reduce images to 5 per motorcycle to free up space
+      setMotorcycles(prev => prev.map(motorcycle => {
+        if (motorcycle.images && motorcycle.images.length > 5) {
+          return {
+            ...motorcycle,
+            images: motorcycle.images.slice(0, 5)
+          };
+        }
+        return motorcycle;
       }));
-      
-      setMotorcycles(updatedMotorcycles);
-      localStorage.setItem('tiger-motos-motorcycles', JSON.stringify(updatedMotorcycles));
-      
-      console.log('Cleanup completed');
-    } catch (error) {
-      console.error('Cleanup failed:', error);
     }
-  }, [motorcycles, getStorageInfo]);
+  }, [getStorageInfo]);
 
   // Sample data - this would normally come from an API
   const sampleMotorcycles: Motorcycle[] = [
@@ -520,10 +483,8 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
       const stored = localStorage.getItem('tiger-motos-motorcycles');
       if (stored) {
         const parsed = JSON.parse(stored);
-        console.log('Loaded motorcycles from localStorage:', parsed.length);
         setMotorcycles(parsed);
       } else {
-        console.log('No stored motorcycles found, using sample data');
         setMotorcycles(sampleMotorcycles);
         localStorage.setItem('tiger-motos-motorcycles', JSON.stringify(sampleMotorcycles));
       }
@@ -541,7 +502,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
       const stored = localStorage.getItem('tiger-motos-cover-photos');
       if (stored) {
         const parsed = JSON.parse(stored);
-        console.log('Loaded cover photos from localStorage:', parsed.length);
         setCoverPhotos(parsed);
       }
     } catch (error) {
@@ -554,7 +514,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
     if (motorcycles.length > 0) {
       try {
         localStorage.setItem('tiger-motos-motorcycles', JSON.stringify(motorcycles));
-        console.log('Motorcycles saved to localStorage');
       } catch (error) {
         console.error('Failed to save motorcycles to localStorage:', error);
         // If we hit quota, try to cleanup
@@ -567,7 +526,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
   const addCoverPhoto = useCallback(async (file: File) => {
     try {
       const thumbnail = await createThumbnail(file);
-      console.log('Adding cover photo thumbnail:', thumbnail.substring(0, 50) + '...');
       setCoverPhotos(prev => {
         const newPhotos = [...prev, thumbnail];
         localStorage.setItem('tiger-motos-cover-photos', JSON.stringify(newPhotos));
@@ -579,7 +537,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
   }, [createThumbnail]);
 
   const addCoverPhotoFromUrl = useCallback((photoUrl: string) => {
-    console.log('Adding cover photo from URL:', photoUrl);
     setCoverPhotos(prev => {
       const newPhotos = [...prev, photoUrl];
       localStorage.setItem('tiger-motos-cover-photos', JSON.stringify(newPhotos));
@@ -588,7 +545,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
   }, []);
 
   const removeCoverPhoto = useCallback((index: number) => {
-    console.log('Removing cover photo at index:', index);
     setCoverPhotos(prev => {
       const newPhotos = prev.filter((_, i) => i !== index);
       localStorage.setItem('tiger-motos-cover-photos', JSON.stringify(newPhotos));
@@ -597,7 +553,6 @@ export const MotorcycleProvider: React.FC<MotorcycleProviderProps> = ({ children
   }, []);
 
   const updateCoverPhotoOrder = useCallback((newOrder: string[]) => {
-    console.log('Updating cover photo order:', newOrder);
     setCoverPhotos(newOrder);
     localStorage.setItem('tiger-motos-cover-photos', JSON.stringify(newOrder));
   }, []);

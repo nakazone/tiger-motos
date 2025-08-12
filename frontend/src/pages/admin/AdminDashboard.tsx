@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useMotorcycles } from '../../contexts/MotorcycleContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { Motorcycle } from '../../types';
 
 const AdminDashboard: React.FC = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const { 
     motorcycles, 
+    loading, 
     addMotorcycle, 
     updateMotorcycle, 
     deleteMotorcycle, 
@@ -114,58 +119,58 @@ const AdminDashboard: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    try {
-      console.log('Form submission started');
-      console.log('Current motorcycleData:', motorcycleData);
-      console.log('Current imageFiles:', imageFiles);
-      console.log('ImageFiles count:', imageFiles.length);
-      
-      // Process the data
+    if (editingMotorcycle) {
+      // Update existing motorcycle
       const processedData = {
-        ...motorcycleData
+        ...motorcycleData,
+        images: editingMotorcycle.images || []
       };
-
-      if (editingMotorcycle) {
-        // Update existing motorcycle with images
-        console.log('Updating motorcycle:', editingMotorcycle._id, processedData);
+      
+      if (imageFiles.length > 0) {
         const result = await updateMotorcycleWithImages(editingMotorcycle._id, processedData, imageFiles);
-        console.log('Update result:', result);
-        alert('Motocicleta atualizada com sucesso!');
+        if (result) {
+          setEditingMotorcycle(null);
+          resetForm();
+          setActiveTab('inventory');
+        }
       } else {
-        // Add new motorcycle with images
-        const newMotorcycle: Motorcycle = {
-          _id: Date.now().toString(),
-          brand: processedData.brand || '',
-          model: processedData.model || '',
-          year: processedData.year || new Date().getFullYear(),
-          price: processedData.price || 0,
-          condition: processedData.condition || 'New',
-          category: processedData.category || 'Standard',
-          engineSize: processedData.engineSize || 0,
-          mileage: processedData.mileage || 0,
-          description: processedData.description || '',
-          features: processedData.features || [],
-          status: processedData.status || 'available',
-          images: processedData.images || [],
-          isFeatured: processedData.isFeatured || false,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-        
-        console.log('Adding new motorcycle with images:', newMotorcycle);
-        const result = await addMotorcycleWithImages(newMotorcycle, imageFiles);
-        console.log('Add result:', result);
-        alert('Motocicleta adicionada com sucesso!');
+        updateMotorcycle(editingMotorcycle._id, processedData);
+        setEditingMotorcycle(null);
+        resetForm();
+        setActiveTab('inventory');
       }
+    } else {
+      // Add new motorcycle
+      const newMotorcycle: Motorcycle = {
+        _id: Date.now().toString(),
+        brand: motorcycleData.brand || '',
+        model: motorcycleData.model || '',
+        year: motorcycleData.year || new Date().getFullYear(),
+        price: motorcycleData.price || 0,
+        condition: motorcycleData.condition || 'New',
+        category: motorcycleData.category || 'Standard',
+        engineSize: motorcycleData.engineSize || 0,
+        mileage: motorcycleData.mileage || 0,
+        description: motorcycleData.description || '',
+        features: motorcycleData.features || [],
+        status: motorcycleData.status || 'available',
+        images: [],
+        isFeatured: motorcycleData.isFeatured || false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
       
-      // Reset form and go to inventory
-      resetForm();
-      setActiveTab('inventory');
-      console.log('Form submission complete, navigating to inventory tab');
-      
-    } catch (error) {
-      console.error('Error saving motorcycle:', error);
-      alert('Erro ao salvar motocicleta. Tente novamente.');
+      if (imageFiles.length > 0) {
+        const result = await addMotorcycleWithImages(newMotorcycle, imageFiles);
+        if (result) {
+          resetForm();
+          setActiveTab('inventory');
+        }
+      } else {
+        addMotorcycle(newMotorcycle);
+        resetForm();
+        setActiveTab('inventory');
+      }
     }
   };
 
@@ -256,55 +261,160 @@ const AdminDashboard: React.FC = () => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
+  const addTestMotorcycle = () => {
+    const testMotorcycle = {
+      _id: 'test-' + Date.now(),
+      brand: 'Test',
+      model: 'Motorcycle',
+      year: 2024,
+      price: 1000,
+      condition: 'New' as const,
+      category: 'Standard' as const,
+      engineSize: 100,
+      mileage: 0,
+      description: 'Test motorcycle',
+      features: ['Test Feature'],
+      status: 'available' as const,
+      images: [],
+      isFeatured: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    addMotorcycle(testMotorcycle);
+    alert('Motorcycle de teste adicionada!');
+  };
+
+
+
+  const checkMotorcycleStorage = (motorcycleId: string) => {
+    const motorcycle = motorcycles.find(m => m._id === motorcycleId);
+    if (!motorcycle) {
+      alert('Motorcycle não encontrada');
+      return;
+    }
+    
+    const motorcycleData = JSON.stringify(motorcycle);
+    const sizeKB = (motorcycleData.length / 1024).toFixed(2);
+    const maxSize = 8; // 8MB limit
+    
+    alert(`Storage da moto ${motorcycle.brand} ${motorcycle.model}:\n\nTamanho: ${sizeKB} KB\nLimite: ${maxSize} MB\n\nStatus: ${motorcycleData.length <= maxSize * 1024 * 1024 ? '✅ OK' : '⚠️ Excede limite'}`);
+  };
+
+  const logMotorcycleImages = (motorcycleId: string) => {
+    const motorcycle = motorcycles.find(m => m._id === motorcycleId);
+    if (!motorcycle) {
+      alert('Motorcycle não encontrada');
+      return;
+    }
+    
+    alert(`Imagens da moto ${motorcycle.brand} ${motorcycle.model}:\n\nTotal: ${motorcycle.images?.length || 0}\n\nStatus: ${motorcycle.images && motorcycle.images.length > 0 ? '✅ Tem imagens' : '❌ Sem imagens'}`);
+  };
+
+  const analyzeImageIssues = () => {
+    const motorcyclesWithBrokenImages = motorcycles.filter(m => {
+      return m.images && m.images.some(img => {
+        try {
+          // Basic validation - check if it's a valid data URL or external URL
+          return img.startsWith('data:') || img.startsWith('http');
+        } catch {
+          return false;
+        }
+      });
+    });
+    
+    const totalImages = motorcycles.reduce((sum, m) => sum + (m.images?.length || 0), 0);
+    const brokenImages = motorcyclesWithBrokenImages.length;
+    
+    alert(`Análise de Imagens:\n\nTotal de motos: ${motorcycles.length}\nTotal de imagens: ${totalImages}\nMotos com imagens: ${brokenImages}\n\nStatus: ${brokenImages > 0 ? '⚠️ Algumas imagens podem ter problemas' : '✅ Todas as imagens parecem OK'}`);
+  };
+
+  const getStorageInfo = () => {
+    const motorcyclesData = localStorage.getItem('tiger-motos-motorcycles') || '';
+    const coverPhotosData = localStorage.getItem('tiger-motos-cover-photos') || '';
+    
+    const motorcyclesSize = new Blob([motorcyclesData]).size;
+    const coverPhotosSize = new Blob([coverPhotosData]).size;
+    const totalSize = motorcyclesSize + coverPhotosSize;
+    
+    const sizeKB = (totalSize / 1024).toFixed(2);
+    const maxSize = 8; // 8MB limit
+    const percentage = ((totalSize / (maxSize * 1024 * 1024)) * 100).toFixed(1);
+    
+    return { motorcyclesSize, coverPhotosSize, totalSize, sizeKB, maxSize, percentage };
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">PAINEL ADMINISTRATIVO TIGER MOTOS</h1>
-          <p className="mt-2 text-gray-300">Controle completo do site e sincronização do inventário</p>
+      {/* Header */}
+      <div className="bg-gray-800 border-b border-gray-700 px-6 py-4">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-4">
+            <div className="h-10 w-10 bg-[#e94925] rounded-full flex items-center justify-center">
+              <span className="text-xl font-bold text-white">T</span>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">Painel Administrativo</h1>
+              <p className="text-gray-400 text-sm">Tiger Motos - Gerenciamento do Sistema</p>
+            </div>
+          </div>
           
-          {/* Debug Info */}
-          <div className="mt-4 p-4 bg-gray-800 rounded-lg">
-            <p className="text-sm text-gray-300">Debug Info:</p>
-            <p className="text-sm text-gray-300">Total motorcycles: {motorcycles.length}</p>
-            <p className="text-sm text-gray-300">Featured motorcycles: {stats.featuredMotorcycles}</p>
-            <p className="text-sm text-gray-300">localStorage has data: {localStorage.getItem('tiger-motos-motorcycles') ? 'Yes' : 'No'}</p>
-            <p className="text-sm text-gray-300">localStorage size: {localStorage.getItem('tiger-motos-motorcycles')?.length || 0} characters</p>
+          <div className="flex items-center space-x-4">
+            <div className="text-right">
+              <p className="text-white font-medium">{user?.username}</p>
+              <p className="text-gray-400 text-sm">{user?.email}</p>
+            </div>
+            <button
+              onClick={() => {
+                if (window.confirm('Tem certeza que deseja sair?')) {
+                  logout();
+                  navigate('/admin/login');
+                }
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-2.293 2.293z" clipRule="evenodd" />
+              </svg>
+              <span>Sair</span>
+            </button>
           </div>
         </div>
+      </div>
 
+      {/* Main Content */}
+      <div className="p-6">
         {/* Navigation Tabs */}
         <div className="flex space-x-1 bg-gray-800 p-1 rounded-lg mb-8">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === 'overview'
                 ? 'bg-[#e94925] text-white'
-                : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700'
             }`}
           >
             📊 Visão Geral
           </button>
           <button
             onClick={() => setActiveTab('inventory')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === 'inventory'
                 ? 'bg-[#e94925] text-white'
-                : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700'
             }`}
           >
             🏍️ Inventário
           </button>
           <button
             onClick={() => setActiveTab('add-edit')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === 'add-edit'
                 ? 'bg-[#e94925] text-white'
-                : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700'
             }`}
           >
-            {editingMotorcycle ? '✏️ Editar Moto' : '➕ Adicionar Moto'}
+            ➕ Adicionar/Editar
           </button>
           <button
             onClick={() => setActiveTab('cover-photos')}
@@ -334,71 +444,33 @@ const AdminDashboard: React.FC = () => {
             >
               🏍️ Ver Inventário
             </button>
-            <button
-              onClick={() => {
-                const testMotorcycle = {
-                  _id: 'test-' + Date.now(),
-                  brand: 'Test',
-                  model: 'Test Model',
-                  year: 2024,
-                  price: 1000,
-                  condition: 'New' as const,
-                  category: 'Standard' as const,
-                  engineSize: 100,
-                  mileage: 0,
-                  description: 'Test motorcycle',
-                  features: ['Test Feature'],
-                  status: 'available' as const,
-                  images: [],
-                  isFeatured: false
-                };
-                console.log('Adding test motorcycle:', testMotorcycle);
-                addMotorcycle(testMotorcycle);
-              }}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-            >
-              🧪 Test Add
-            </button>
+            <div className="flex space-x-4">
+              <button
+                onClick={() => addTestMotorcycle()}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              >
+                🧪 Test Add
+              </button>
+              <button
+                onClick={() => clearStorage()}
+                className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              >
+                🗑️ Clear Storage
+              </button>
+            </div>
             <button
               onClick={() => exportData()}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
               📊 Export Data
             </button>
-            <button
-              onClick={() => clearStorage()}
-              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-            >
-              🗑️ Clear Storage
-            </button>
-            <button
-              onClick={() => {
-                console.log('=== DEBUG INFO ===');
-                console.log('Current motorcycles in context:', motorcycles);
-                console.log('Motorcycles count:', motorcycles.length);
-                motorcycles.forEach((m, i) => {
-                  console.log(`Motorcycle ${i}:`, {
-                    id: m._id,
-                    brand: m.brand,
-                    model: m.model,
-                    imagesCount: m.images?.length || 0,
-                    images: m.images
-                  });
-                });
-                console.log('localStorage motorcycles:', localStorage.getItem('tiger-motos-motorcycles'));
-                console.log('==================');
-              }}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-            >
-              🐛 Debug Info
-            </button>
           </div>
         </div>
 
         {/* Content based on active tab */}
         {activeTab === 'overview' && (
-          <div className="space-y-8">
-            {/* Statistics Cards */}
+          <div className="space-y-6">
+            {/* Statistics Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
                 <div className="flex items-center">
@@ -451,7 +523,7 @@ const AdminDashboard: React.FC = () => {
 
             {/* Recent Activity */}
             <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
-              <h3 className="text-lg font-medium text-white mb-4">Atividade Recente</h3>
+              <h3 className="text-lg font-medium text-white mb-6">📈 Atividade Recente</h3>
               <div className="space-y-3">
                 {motorcycles.slice(0, 5).map((motorcycle) => (
                   <div key={motorcycle._id} className="flex items-center justify-between p-3 bg-gray-700 rounded-lg">
@@ -464,16 +536,30 @@ const AdminDashboard: React.FC = () => {
                     <div className="flex space-x-2">
                       <button
                         onClick={() => handleEdit(motorcycle)}
-                        className="text-blue-400 hover:text-blue-300 text-sm"
+                        className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
                       >
-                        Editar
+                        ✏️ Editar
                       </button>
-                                             <button
-                         onClick={() => toggleFeatured(motorcycle._id, motorcycle.isFeatured || false)}
-                         className={`text-sm ${motorcycle.isFeatured ? 'text-yellow-400' : 'text-gray-400'}`}
-                       >
-                         {motorcycle.isFeatured ? '⭐' : '☆'}
-                       </button>
+                      <button
+                        onClick={() => toggleStatus(motorcycle._id, motorcycle.status)}
+                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          motorcycle.status === 'available'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        {motorcycle.status === 'available' ? 'Disponível' : 'Vendida'}
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (window.confirm(`Tem certeza que deseja excluir ${motorcycle.brand} ${motorcycle.model}?`)) {
+                            deleteMotorcycle(motorcycle._id);
+                          }
+                        }}
+                        className="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
+                      >
+                        🗑️ Excluir
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -484,87 +570,6 @@ const AdminDashboard: React.FC = () => {
 
         {activeTab === 'inventory' && (
           <div className="space-y-6">
-            {/* Debug Info for Inventory */}
-            <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
-              <h4 className="text-sm font-medium text-white mb-2">🔍 Inventory Debug:</h4>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-gray-300">
-                <div>
-                  <p>Total motorcycles: {motorcycles.length}</p>
-                  <p>Filtered count: {filteredMotorcycles.length}</p>
-                </div>
-                <div>
-                  <p>localStorage has data: {localStorage.getItem('tiger-motos-motorcycles') ? 'Yes' : 'No'}</p>
-                  <p>localStorage size: {localStorage.getItem('tiger-motos-motorcycles')?.length || 0}</p>
-                </div>
-                <div>
-                  <p>Sample motorcycles:</p>
-                  {motorcycles.slice(0, 3).map((m, i) => (
-                    <p key={i}>• {m.brand} {m.model}</p>
-                  ))}
-                </div>
-                <div>
-                  <button
-                    onClick={() => {
-                      console.log('=== ADMIN INVENTORY DEBUG ===');
-                      console.log('Current motorcycles:', motorcycles);
-                      console.log('localStorage data:', localStorage.getItem('tiger-motos-motorcycles'));
-                      console.log('============================');
-                    }}
-                    className="px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
-                  >
-                    Log Debug
-                  </button>
-                  <button
-                    onClick={() => {
-                      console.log('=== IMAGE STORAGE DEBUG ===');
-                      console.log('sessionStorage keys:', Object.keys(sessionStorage));
-                      motorcycles.forEach((m, i) => {
-                        console.log(`Motorcycle ${i}:`, {
-                          id: m._id,
-                          brand: m.brand,
-                          model: m.model,
-                          imagesCount: m.images?.length || 0,
-                          images: m.images,
-                          imageTypes: m.images?.map(img => img.substring(0, 50) + '...') || []
-                        });
-                      });
-                      console.log('============================');
-                    }}
-                    className="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
-                  >
-                    Image Debug
-                  </button>
-                  <button
-                    onClick={() => {
-                      // Test adding a motorcycle with a simple image
-                      const testImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzMyIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2Ij5UZXN0IEltYWdlPC90ZXh0Pjwvc3ZnPg==';
-                      const testMotorcycle = {
-                        _id: 'test-img-' + Date.now(),
-                        brand: 'Test',
-                        model: 'Image Test',
-                        year: 2024,
-                        price: 1000,
-                        condition: 'New' as const,
-                        category: 'Standard' as const,
-                        engineSize: 100,
-                        mileage: 0,
-                        description: 'Test motorcycle with image',
-                        features: ['Test Feature'],
-                        status: 'available' as const,
-                        images: [testImage],
-                        isFeatured: false
-                      };
-                      console.log('Adding test motorcycle with image:', testMotorcycle);
-                      addMotorcycle(testMotorcycle);
-                    }}
-                    className="px-2 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700"
-                  >
-                    🧪 Test Image
-                  </button>
-                </div>
-              </div>
-            </div>
-
             {/* Image Management Section */}
             <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
               <h3 className="text-lg font-medium text-white mb-6">🖼️ Gerenciamento de Imagens</h3>
@@ -665,7 +670,6 @@ const AdminDashboard: React.FC = () => {
                           const sizeKB = (size / 1024).toFixed(2);
                           const maxSize = (8 * 1024).toFixed(2); // 8MB
                           const percentage = ((size / (8 * 1024 * 1024)) * 100).toFixed(1);
-                          console.log('localStorage size:', sizeKB, 'KB /', maxSize, 'KB (', percentage, '%)');
                           alert(`localStorage: ${sizeKB} KB / ${maxSize} KB (${percentage}%)\n\nLimite: 8MB total\nPor moto: Máx 10 imagens\nPor imagem: Máx 500KB`);
                         }
                       }}
@@ -726,16 +730,10 @@ const AdminDashboard: React.FC = () => {
                           {motorcycle.images?.length || 0} imagens
                         </p>
                         <button
-                          onClick={() => {
-                            console.log('=== MOTORCYCLE IMAGES DEBUG ===');
-                            console.log('Motorcycle:', motorcycle);
-                            console.log('Images:', motorcycle.images);
-                            console.log('Image count:', motorcycle.images?.length || 0);
-                            console.log('================================');
-                          }}
+                          onClick={() => logMotorcycleImages(motorcycle._id)}
                           className="px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 mt-1"
                         >
-                          🐛 Debug
+                          🔍 Ver Imagens
                         </button>
                       </div>
                     </div>
@@ -821,15 +819,9 @@ const AdminDashboard: React.FC = () => {
                               <img
                                 src={image}
                                 alt={`${motorcycle.brand} ${motorcycle.model} - Imagem ${index + 1}`}
-                                className="w-full h-24 object-cover rounded-lg border-2 border-gray-600 group-hover:border-[#e84925] transition-colors"
-                                onError={(e) => {
-                                  console.error(`Image ${index} failed to load for motorcycle ${motorcycle._id}:`, image);
-                                  // Mark as failed
-                                  e.currentTarget.style.borderColor = 'red';
-                                  e.currentTarget.style.opacity = '0.5';
-                                }}
+                                className="w-full h-full object-cover rounded-lg"
                                 onLoad={() => {
-                                  console.log(`Image ${index} loaded successfully for motorcycle ${motorcycle._id}`);
+                                  // Image loaded successfully
                                 }}
                               />
                               <div className="absolute top-1 left-1 bg-black bg-opacity-70 text-white px-1 py-0.5 rounded text-xs">
@@ -902,47 +894,6 @@ const AdminDashboard: React.FC = () => {
                         className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
                       >
                         ✏️ Editar e Adicionar Imagens
-                      </button>
-                      <button
-                        onClick={() => {
-                          // Add a test image to this motorcycle
-                          const testImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzMyIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2Ij5UZXN0IEltYWdlPC90ZXh0Pjwvc3ZnPg==';
-                          const updatedImages = [...(motorcycle.images || []), testImage];
-                          updateMotorcycle(motorcycle._id, { images: updatedImages });
-                        }}
-                        className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
-                      >
-                        🧪 Adicionar Imagem Teste
-                      </button>
-                      <button
-                        onClick={() => {
-                          // Test upload with storage check
-                          const testImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzMyIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9IkFyaWFsIiBmb250LXNpemU9IjE2Ij5UZXN0IEltYWdlPC90ZXh0Pjwvc3ZnPg==';
-                          const updatedImages = [...(motorcycle.images || []), testImage];
-                          
-                          // Check storage before updating
-                          const testData = JSON.stringify([...motorcycles.filter(m => m._id !== motorcycle._id), { ...motorcycle, images: updatedImages }]);
-                          const testSize = new Blob([testData]).size;
-                          const currentData = localStorage.getItem('tiger-motos-motorcycles') || '';
-                          const currentSize = new Blob([currentData]).size;
-                          const availableSpace = (8 * 1024 * 1024) - currentSize; // Updated to 8MB
-                          
-                          console.log('Storage test for motorcycle:', motorcycle._id);
-                          console.log('Current size:', (currentSize / 1024).toFixed(2), 'KB');
-                          console.log('Test size:', (testSize / 1024).toFixed(2), 'KB');
-                          console.log('Available space:', (availableSpace / 1024).toFixed(2), 'KB');
-                          console.log('Will fit:', testSize <= availableSpace);
-                          
-                          if (testSize <= availableSpace) {
-                            updateMotorcycle(motorcycle._id, { images: updatedImages });
-                            alert('Teste de upload bem-sucedido! Verifique o console para detalhes.');
-                          } else {
-                            alert(`ERRO: Storage insuficiente!\n\nEspaço disponível: ${(availableSpace / 1024).toFixed(2)} KB\nTamanho necessário: ${(testSize / 1024).toFixed(2)} KB\n\nConsidere remover imagens antigas.`);
-                          }
-                        }}
-                        className="px-3 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700"
-                      >
-                        🔍 Teste de Storage
                       </button>
                       <button
                         onClick={() => {
@@ -1066,21 +1017,8 @@ const AdminDashboard: React.FC = () => {
                   <h4 className="text-sm font-medium text-white mb-3">📊 Análise de Imagens</h4>
                   <div className="space-y-3">
                     <button
-                      onClick={() => {
-                        console.log('=== IMAGE ANALYSIS ===');
-                        motorcycles.forEach((m, i) => {
-                          const validImages = m.images?.filter(img => img && img.length > 0) || [];
-                          const brokenImages = m.images?.filter(img => !img || img.length === 0) || [];
-                          console.log(`Motorcycle ${i} (${m.brand} ${m.model}):`, {
-                            total: m.images?.length || 0,
-                            valid: validImages.length,
-                            broken: brokenImages.length,
-                            images: m.images
-                          });
-                        });
-                        console.log('====================');
-                      }}
-                      className="w-full px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                      onClick={() => analyzeImageIssues()}
+                      className="px-3 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700"
                     >
                       🔍 Analisar Imagens
                     </button>
@@ -1095,8 +1033,7 @@ const AdminDashboard: React.FC = () => {
                         if (motorcyclesWithBrokenImages.length === 0) {
                           alert('Nenhuma motocicleta com imagens quebradas encontrada!');
                         } else {
-                          console.log('Motorcycles with broken images:', motorcyclesWithBrokenImages);
-                          alert(`Encontradas ${motorcyclesWithBrokenImages.length} motocicletas com imagens quebradas. Verifique o console.`);
+                          alert(`Encontradas ${motorcyclesWithBrokenImages.length} motocicletas com imagens quebradas.`);
                         }
                       }}
                       className="w-full px-3 py-2 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700"
@@ -1309,15 +1246,29 @@ const AdminDashboard: React.FC = () => {
                           <div className="flex space-x-2">
                             <button
                               onClick={() => handleEdit(motorcycle)}
-                              className="text-blue-400 hover:text-blue-300"
+                              className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
                             >
-                              Editar
+                              ✏️ Editar
                             </button>
                             <button
-                              onClick={() => handleDelete(motorcycle._id)}
-                              className="text-red-400 hover:text-red-300"
+                              onClick={() => toggleStatus(motorcycle._id, motorcycle.status)}
+                              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                motorcycle.status === 'available'
+                                  ? 'bg-green-100 text-green-800'
+                                  : 'bg-red-100 text-red-800'
+                              }`}
                             >
-                              Excluir
+                              {motorcycle.status === 'available' ? 'Disponível' : 'Vendida'}
+                            </button>
+                            <button
+                              onClick={() => {
+                                if (window.confirm(`Tem certeza que deseja excluir ${motorcycle.brand} ${motorcycle.model}?`)) {
+                                  deleteMotorcycle(motorcycle._id);
+                                }
+                              }}
+                              className="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
+                            >
+                              🗑️ Excluir
                             </button>
                           </div>
                         </td>

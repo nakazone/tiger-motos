@@ -34,9 +34,8 @@ const Sell: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Sell form submitted:', formData);
-    alert('Obrigado pelo interesse em vender sua moto! Entraremos em contato em breve para avaliar sua motocicleta.');
+    // Handle form submission
+    alert('Obrigado pelo seu interesse! Entraremos em contato em breve para discutir a venda da sua moto.');
     setFormData({
       name: '',
       email: '',

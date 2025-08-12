@@ -17,32 +17,36 @@ const MotorcycleDetail: React.FC = () => {
   });
   const [showWhatsAppChat, setShowWhatsAppChat] = useState(false);
 
+  // Find the motorcycle by ID
+  const foundMotorcycle = motorcycles.find(m => m._id === id);
+  
+  // Set motorcycle state when found
   useEffect(() => {
-    if (id) {
-      const foundMotorcycle = getMotorcycleById(id);
-      setMotorcycle(foundMotorcycle || null);
-      console.log('MotorcycleDetail: Found motorcycle:', foundMotorcycle);
-      console.log('MotorcycleDetail: Motorcycle images:', foundMotorcycle?.images);
-      console.log('MotorcycleDetail: Image count:', foundMotorcycle?.images?.length);
-      
-      if (foundMotorcycle) {
-        // Set related motorcycles (similar category, different brand)
-        const related = motorcycles
-          .filter(m => m._id !== id && m.category === foundMotorcycle.category)
-          .slice(0, 3);
-        setRelatedMotorcycles(related);
-      }
+    if (foundMotorcycle) {
+      setMotorcycle(foundMotorcycle);
     }
-  }, [id, getMotorcycleById, motorcycles]);
+  }, [foundMotorcycle]);
 
-  console.log('MotorcycleDetail: Current motorcycle:', motorcycle);
-  console.log('MotorcycleDetail: Current image index:', currentImageIndex);
-  console.log('MotorcycleDetail: Available images:', motorcycle?.images);
+  // Update current image index when motorcycle changes
+  useEffect(() => {
+    if (motorcycle && motorcycle.images && motorcycle.images.length > 0) {
+      setCurrentImageIndex(0);
+    }
+  }, [motorcycle]);
+
+  // Set related motorcycles (similar category, different brand)
+  useEffect(() => {
+    if (motorcycle) {
+      const related = motorcycles
+        .filter(m => m._id !== id && m.category === motorcycle.category)
+        .slice(0, 3);
+      setRelatedMotorcycles(related);
+    }
+  }, [id, motorcycle, motorcycles]);
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission
-    console.log('Contact form submitted:', contactForm);
     alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
     setContactForm({ name: '', email: '', phone: '', message: '' });
   };
@@ -62,7 +66,23 @@ const MotorcycleDetail: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex items-center space-x-4">
+            <Link
+              to="/inventory"
+              className="text-[#e94925] hover:text-[#d13d1f] transition-colors"
+            >
+              ← Voltar ao Inventário
+            </Link>
+            <span className="text-gray-400">/</span>
+            <span className="text-gray-600">{motorcycle.brand} {motorcycle.model}</span>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 py-16">
         {/* Header */}
         <div className="mb-12">
@@ -70,53 +90,6 @@ const MotorcycleDetail: React.FC = () => {
             {motorcycle.brand} {motorcycle.model}
           </h1>
           <p className="text-xl text-gray-300">{motorcycle.year} • {motorcycle.mileage.toLocaleString()} km</p>
-        </div>
-
-        {/* Debug Info */}
-        <div className="mb-6 p-4 bg-gray-800 rounded-lg border border-gray-700">
-          <h3 className="text-sm font-medium text-white mb-2">Debug Info:</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-300">
-            <div>
-              <p>Motorcycle ID: {id}</p>
-              <p>Motorcycle found: {motorcycle ? 'Yes' : 'No'}</p>
-              <p>Raw images count: {motorcycle?.images?.length || 0}</p>
-              <p>Processed images count: {motorcycle?.images?.length || 0}</p>
-            </div>
-            <div>
-              <button
-                onClick={() => {
-                  console.log('=== MOTORCYCLE DETAIL DEBUG ===');
-                  console.log('Motorcycle:', motorcycle);
-                  console.log('Raw images:', motorcycle?.images);
-                  console.log('Current image index:', currentImageIndex);
-                  console.log('================================');
-                }}
-                className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
-              >
-                🐛 Log Debug
-              </button>
-            </div>
-            <div>
-              <button
-                onClick={() => {
-                  if (motorcycle) {
-                    // Add a test image to this motorcycle
-                    const testImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzMyIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2Ij5UZXN0IEltYWdlPC90ZXh0Pjwvc3ZnPg==';
-                    const updatedMotorcycle = {
-                      ...motorcycle,
-                      images: [...(motorcycle.images || []), testImage]
-                    };
-                    console.log('Adding test image to motorcycle:', updatedMotorcycle);
-                    // Force a re-render by updating state
-                    setMotorcycle(updatedMotorcycle);
-                  }
-                }}
-                className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
-              >
-                🧪 Add Test Image
-              </button>
-            </div>
-          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -127,19 +100,12 @@ const MotorcycleDetail: React.FC = () => {
               <div className="relative h-96 bg-gray-800">
                 {motorcycle.images && motorcycle.images.length > 0 ? (
                   <>
-                    <div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs z-10">
-                      Debug: {motorcycle.images.length} images, current: {currentImageIndex}
-                    </div>
                     <img
                       src={motorcycle.images[currentImageIndex]}
-                      alt={`${motorcycle.brand} ${motorcycle.model}`}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        console.error('Image failed to load:', motorcycle.images[currentImageIndex]);
-                        console.error('Error event:', e);
-                      }}
+                      alt={`${motorcycle.brand} ${motorcycle.model} - Imagem ${currentImageIndex + 1}`}
+                      className="w-full h-96 object-cover rounded-lg"
                       onLoad={() => {
-                        console.log('Image loaded successfully:', motorcycle.images[currentImageIndex]);
+                        // Image loaded successfully
                       }}
                     />
                     {motorcycle.images.length > 1 && (
@@ -165,9 +131,6 @@ const MotorcycleDetail: React.FC = () => {
                       <span className="text-6xl text-gray-400 mb-4">🏍️</span>
                       <p className="text-gray-400 text-lg">Nenhuma foto disponível</p>
                       <p className="text-gray-500 text-sm">As fotos aparecem aqui quando adicionadas pelo admin</p>
-                      <div className="mt-4 p-2 bg-gray-700 rounded text-xs text-gray-300">
-                        Debug: motorcycle.images = {JSON.stringify(motorcycle.images)}
-                      </div>
                     </div>
                   </div>
                 )}
@@ -176,9 +139,6 @@ const MotorcycleDetail: React.FC = () => {
               {/* Thumbnail Navigation */}
               {motorcycle.images && motorcycle.images.length > 0 ? (
                 <div className="flex space-x-2 mt-4 overflow-x-auto">
-                  <div className="mb-2 text-xs text-gray-500">
-                    Debug: {motorcycle.images.length} thumbnails available
-                  </div>
                   {motorcycle.images.map((image, index) => (
                     <button
                       key={index}
@@ -206,9 +166,6 @@ const MotorcycleDetail: React.FC = () => {
                   <p className="text-gray-400 text-xs mt-1">
                     As fotos aparecem aqui quando adicionadas pelo painel administrativo
                   </p>
-                  <div className="mt-2 p-2 bg-gray-200 rounded text-xs text-gray-600">
-                    Debug: motorcycle.images = {JSON.stringify(motorcycle.images)}
-                  </div>
                 </div>
               )}
             </div>

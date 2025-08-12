@@ -18,16 +18,9 @@ const Contact: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    alert('Obrigado pela sua mensagem! Entraremos em contato em breve.');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: ''
-    });
+    // Handle form submission
+    alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
   };
 
   return (

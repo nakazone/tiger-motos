@@ -31,10 +31,7 @@ const Home: React.FC = () => {
             className="w-full h-full object-cover min-h-screen hero-video"
             style={{ minHeight: '100vh', height: '100vh' }}
             poster="https://images.unsplash.com/photo-1558981806-ec527fa84a39?w=1920&h=1080&fit=crop"
-            onLoadStart={() => console.log('Video loading started')}
-            onCanPlay={() => console.log('Video can play')}
             onError={(e) => {
-              console.error('Video error:', e);
               const target = e.target as HTMLVideoElement;
               target.style.display = 'none';
               // Show fallback background
