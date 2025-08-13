@@ -32,7 +32,7 @@ function App() {
                 <Route path="/vender" element={<Sell />} />
                 <Route path="/motorcycle/:id" element={<MotorcycleDetail />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/painel" element={<AdminDashboard />} />
                 <Route path="/admin/estoque" element={<AdminInventory />} />
                 <Route path="/admin/motorcycle/:id" element={<AdminMotorcycleForm />} />
                 <Route path="/admin/motorcycle/new" element={<AdminMotorcycleForm />} />

@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
   ];
 
   const adminNavigation = [
-    { name: 'Painel', href: '/admin/dashboard' },
+    { name: 'Painel', href: '/admin/painel' },
   ];
 
   const handleLogout = () => {
