@@ -16,37 +16,31 @@ const Inventory: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-xl text-gray-600">Carregando inventário...</div>
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="text-xl text-white">Carregando inventário...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <section className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h1 className="text-3xl font-bold text-gray-900">Nosso Estoque</h1>
-          <p className="mt-2 text-gray-600">
-            Descubra nossa seleção de motocicletas premium
-          </p>
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 py-16">
+        {/* Header */}
+        <div className="mb-12">
+          <h1 className="text-5xl font-bold text-white mb-4 text-left">NOSSO ESTOQUE</h1>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters */}
-        <div className="bg-gray-900 rounded-lg p-8 mb-12 border border-gray-800">
-          <h2 className="text-xl font-semibold text-white mb-6">Filtros</h2>
+        <div className="bg-gray-900 p-8 mb-12 border border-gray-800">
+          <h2 className="text-xl font-semibold text-white mb-6 text-left">Filtros</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Marca</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-left">Marca</label>
               <select
                 value={filters.brand}
                 onChange={(e) => setFilters({...filters, brand: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:border-transparent"
               >
                 <option value="">Todas as marcas</option>
                 <option value="Honda">Honda</option>
@@ -59,27 +53,27 @@ const Inventory: React.FC = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Categoria</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-left">Categoria</label>
               <select
                 value={filters.category}
                 onChange={(e) => setFilters({...filters, category: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:border-transparent"
               >
                 <option value="">Todas as categorias</option>
-                <option value="Sport">Sport</option>
-                <option value="Cruiser">Cruiser</option>
+                <option value="Sport">Esportiva</option>
+                <option value="Cruiser">Custom</option>
                 <option value="Touring">Touring</option>
-                <option value="Adventure">Adventure</option>
-                <option value="Standard">Standard</option>
+                <option value="Adventure">Aventura</option>
+                <option value="Standard">Padrão</option>
               </select>
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Faixa de Preço</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-left">Faixa de Preço</label>
               <select
                 value={filters.priceRange}
                 onChange={(e) => setFilters({...filters, priceRange: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:border-transparent"
               >
                 <option value="">Qualquer preço</option>
                 <option value="0-5000">Até R$ 5.000</option>
@@ -90,11 +84,11 @@ const Inventory: React.FC = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Condição</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-left">Condição</label>
               <select
                 value={filters.condition}
                 onChange={(e) => setFilters({...filters, condition: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:border-transparent"
               >
                 <option value="">Qualquer condição</option>
                 <option value="Excellent">Excelente</option>
@@ -114,10 +108,10 @@ const Inventory: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredMotorcycles.map((motorcycle) => (
-              <div key={motorcycle._id} className="bg-gray-900 shadow-lg overflow-hidden rounded-lg" style={{ height: '600px' }}>
+              <div key={motorcycle._id} className="bg-gray-900 shadow-lg overflow-hidden" style={{ height: '600px' }}>
                 {/* Title */}
                 <div className="p-6 pb-4">
-                  <h3 className="text-2xl font-semibold text-white mb-2">
+                  <h3 className="text-2xl font-semibold text-white mb-2 text-left">
                     {motorcycle.brand} {motorcycle.model}
                   </h3>
                 </div>
@@ -125,7 +119,7 @@ const Inventory: React.FC = () => {
                 {/* Cover Photo */}
                 <div className="px-6 pb-6">
                   <Link to={`/motorcycle/${motorcycle._id}`} className="block">
-                    <div className="relative h-80 bg-gray-800 rounded-lg overflow-hidden hover:opacity-90 transition-opacity cursor-pointer">
+                    <div className="relative h-80 bg-gray-800 overflow-hidden hover:opacity-90 transition-opacity cursor-pointer">
                       {motorcycle.images && motorcycle.images.length > 0 ? (
                         <img
                           src={motorcycle.images[0]}
@@ -174,7 +168,7 @@ const Inventory: React.FC = () => {
                     </div>
                     <Link
                       to={`/motorcycle/${motorcycle._id}`}
-                      className="bg-[#e94925] text-white px-6 py-3 hover:bg-[#d13d1f] transition-colors text-lg font-semibold rounded-lg"
+                      className="bg-[#e94925] text-white px-6 py-3 hover:bg-[#d13d1f] transition-colors text-lg font-semibold"
                     >
                       Ver Mais
                     </Link>

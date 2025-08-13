@@ -55,7 +55,7 @@ const AdminInventory: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-xl">Loading inventory...</div>
+        <div className="text-xl">Carregando inventário...</div>
       </div>
     );
   }
@@ -65,8 +65,8 @@ const AdminInventory: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Admin Inventory</h1>
-            <p className="mt-2 text-gray-600">Manage your motorcycle inventory</p>
+            <h1 className="text-3xl font-bold text-gray-900">Inventário Administrativo</h1>
+            <p className="mt-2 text-gray-600">Gerencie seu inventário de motocicletas</p>
           </div>
           <Link
             to="/admin/motorcycle/new"
@@ -214,13 +214,14 @@ const AdminInventory: React.FC = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            motorcycle.status === 'available' 
+                            motorcycle.status === 'disponível' 
                               ? 'bg-green-100 text-green-800' 
-                              : motorcycle.status === 'sold'
+                              : motorcycle.status === 'vendido'
                               ? 'bg-red-100 text-red-800'
                               : 'bg-yellow-100 text-yellow-800'
                           }`}>
-                            {motorcycle.status}
+                            {motorcycle.status === 'disponível' ? 'Disponível' : 
+                             motorcycle.status === 'vendido' ? 'Vendida' : 'Pendente'}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

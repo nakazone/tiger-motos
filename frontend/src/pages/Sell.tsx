@@ -55,17 +55,20 @@ const Sell: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 py-16">
-        <div className="bg-gray-900 rounded-lg shadow-lg p-8 border border-gray-800">
-          <h2 className="text-2xl font-bold text-white mb-6">Venda Sua Motocicleta</h2>
-          
+        {/* Header */}
+        <div className="mb-12">
+          <h1 className="text-5xl font-bold text-white mb-4 text-left">VENDA SUA MOTOCICLETA</h1>
+        </div>
+
+        <div className="bg-gray-900 shadow-lg p-8 border border-gray-800">
           <div className="mb-8">
-            <p className="text-gray-300 mb-4">
+            <p className="text-gray-300 mb-4 text-left">
               Está pensando em vender sua motocicleta? A Tiger Motos pode ajudar! 
               Preencha o formulário abaixo e nossa equipe entrará em contato para avaliar sua moto.
             </p>
-            <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-              <h3 className="text-lg font-semibold text-white mb-2">Por que vender conosco?</h3>
-              <ul className="text-gray-300 space-y-1">
+            <div className="bg-gray-800 p-4 border border-gray-700">
+              <h3 className="text-lg font-semibold text-white mb-2 text-left">Por que vender conosco?</h3>
+              <ul className="text-gray-300 space-y-1 text-left">
                 <li>• Avaliação profissional e justa</li>
                 <li>• Processo rápido e transparente</li>
                 <li>• Pagamento à vista</li>
@@ -77,10 +80,10 @@ const Sell: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Personal Information */}
             <div className="border-b border-gray-700 pb-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Informações Pessoais</h2>
+              <h2 className="text-xl font-semibold text-white mb-4 text-left">Informações Pessoais</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Nome Completo *
                   </label>
                   <input
@@ -90,13 +93,13 @@ const Sell: React.FC = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                     placeholder="Seu nome completo"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Email *
                   </label>
                   <input
@@ -106,13 +109,13 @@ const Sell: React.FC = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                     placeholder="seu@email.com"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Telefone/WhatsApp *
                   </label>
                   <input
@@ -122,7 +125,7 @@ const Sell: React.FC = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                     placeholder="(11) 99999-9999"
                   />
                 </div>
@@ -131,10 +134,10 @@ const Sell: React.FC = () => {
 
             {/* Motorcycle Information */}
             <div className="border-b border-gray-700 pb-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Informações da Motocicleta</h2>
+              <h2 className="text-xl font-semibold text-white mb-4 text-left">Informações da Motocicleta</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="brand" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="brand" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Marca *
                   </label>
                   <input
@@ -145,12 +148,12 @@ const Sell: React.FC = () => {
                     onChange={handleChange}
                     required
                     placeholder="Ex: Honda, Yamaha, Kawasaki"
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="model" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="model" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Modelo *
                   </label>
                   <input
@@ -161,12 +164,12 @@ const Sell: React.FC = () => {
                     onChange={handleChange}
                     required
                     placeholder="Ex: CBR600RR, YZF-R1"
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="year" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="year" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Ano *
                   </label>
                   <input
@@ -178,13 +181,13 @@ const Sell: React.FC = () => {
                     required
                     min="1900"
                     max={new Date().getFullYear() + 1}
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                     placeholder="2020"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="mileage" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="mileage" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Quilometragem (km) *
                   </label>
                   <input
@@ -195,13 +198,13 @@ const Sell: React.FC = () => {
                     onChange={handleChange}
                     required
                     min="0"
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                     placeholder="5000"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="condition" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="condition" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Estado de Conservação *
                   </label>
                   <select
@@ -210,7 +213,7 @@ const Sell: React.FC = () => {
                     value={formData.condition}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-[#e94925]"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-[#e94925]"
                   >
                     <option value="">Selecione o estado</option>
                     <option value="excellent">Excelente</option>
@@ -221,7 +224,7 @@ const Sell: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="price" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="price" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Preço Desejado (R$) *
                   </label>
                   <input
@@ -233,7 +236,7 @@ const Sell: React.FC = () => {
                     required
                     min="0"
                     step="0.01"
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                     placeholder="15000"
                   />
                 </div>
@@ -242,10 +245,10 @@ const Sell: React.FC = () => {
 
             {/* Description */}
             <div className="border-b border-gray-700 pb-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Descrição e Detalhes</h2>
+              <h2 className="text-xl font-semibold text-white mb-4 text-left">Descrição e Detalhes</h2>
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Descrição da Motocicleta *
                   </label>
                   <textarea
@@ -256,12 +259,12 @@ const Sell: React.FC = () => {
                     onChange={handleChange}
                     required
                     placeholder="Descreva o estado geral, histórico de manutenção, modificações, etc."
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925] resize-none"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925] resize-none"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="features" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="features" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                     Acessórios e Equipamentos
                   </label>
                   <textarea
@@ -271,7 +274,7 @@ const Sell: React.FC = () => {
                     value={formData.features}
                     onChange={handleChange}
                     placeholder="Liste acessórios, equipamentos de segurança, modificações, etc."
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925] resize-none"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925] resize-none"
                   />
                 </div>
               </div>
@@ -279,9 +282,9 @@ const Sell: React.FC = () => {
 
             {/* Images */}
             <div className="border-b border-gray-700 pb-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Fotos da Motocicleta</h2>
+              <h2 className="text-xl font-semibold text-white mb-4 text-left">Fotos da Motocicleta</h2>
               <div>
-                <label htmlFor="images" className="block text-sm font-medium text-gray-300 mb-1">
+                <label htmlFor="images" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                   Envie fotos da sua moto (máximo 5 fotos)
                 </label>
                 <input
@@ -291,9 +294,9 @@ const Sell: React.FC = () => {
                   multiple
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-[#e94925] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#e94925] file:text-white hover:file:bg-[#d13d1f] file:cursor-pointer"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-[#e94925] file:mr-4 file:py-2 file:px-4 file:text-sm file:font-semibold file:bg-[#e94925] file:text-white hover:file:bg-[#d13d1f] file:cursor-pointer"
                 />
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-sm text-gray-400 mt-1 text-left">
                   Formatos aceitos: JPG, PNG. Tamanho máximo: 5MB por foto.
                 </p>
               </div>
@@ -303,7 +306,7 @@ const Sell: React.FC = () => {
             <div className="text-center">
               <button
                 type="submit"
-                className="bg-[#e94925] hover:bg-[#d13d1f] text-white px-8 py-3 rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:ring-offset-2 focus:ring-offset-gray-900"
+                className="bg-[#e94925] hover:bg-[#d13d1f] text-white px-8 py-3 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:ring-offset-2 focus:ring-offset-gray-900"
               >
                 Enviar Proposta de Venda
               </button>

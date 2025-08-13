@@ -62,7 +62,7 @@ const Home: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-start items-start">
             <Link
-              to="/inventory"
+              to="/estoque"
               className="group bg-[#e94925] text-white px-6 sm:px-10 py-3 sm:py-4 font-bold text-base sm:text-lg hover:bg-[#d13d1f] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
               <span>Conheça nosso Estoque</span>
@@ -165,7 +165,7 @@ const Home: React.FC = () => {
               </h2>
             </div>
             <Link
-              to="/inventory"
+              to="/estoque"
               className="inline-flex items-center px-6 py-3 text-base font-medium text-[#e94925] hover:text-[#d13d1f] transition-all duration-300"
             >
               Ver Todas as Motos
@@ -272,7 +272,7 @@ const Home: React.FC = () => {
               <h3 className="text-2xl font-semibold text-gray-300 mb-2">Nenhuma moto em destaque</h3>
               <p className="text-gray-500 mb-6">Adicione motocicletas marcadas como "featured" no painel admin</p>
               <Link
-                to="/inventory"
+                to="/estoque"
                 className="inline-flex items-center px-6 py-3 bg-[#e94925] text-white font-semibold rounded hover:bg-[#d13d1f] transition-colors"
               >
                 Ver Inventário Completo
@@ -347,13 +347,13 @@ const Home: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/inventory"
+              to="/estoque"
               className="bg-[#e94925] text-white px-8 py-3 font-semibold hover:bg-[#d13d1f] transition-colors"
             >
               Conheça nosso Estoque
             </Link>
             <Link
-              to="/contact"
+              to="/contato"
               className="border-2 border-[#e94925] text-white px-8 py-3 font-semibold hover:bg-[#e94925] hover:text-white transition-colors"
             >
               Entre em Contato

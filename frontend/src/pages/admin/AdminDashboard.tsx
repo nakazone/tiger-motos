@@ -34,13 +34,13 @@ const AdminDashboard: React.FC = () => {
     model: '',
     year: new Date().getFullYear(),
     price: 0,
-    condition: 'New',
-    category: 'Standard',
+    condition: 'Novo',
+    category: 'Padrão',
     engineSize: 0,
     mileage: 0,
     description: '',
     features: [],
-    status: 'available',
+    status: 'disponível',
     images: [],
     isFeatured: false
   });
@@ -50,15 +50,15 @@ const AdminDashboard: React.FC = () => {
 
   // Search and filter
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'available' | 'sold' | 'pending'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'disponível' | 'vendido' | 'pendente'>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
   // Calculate comprehensive stats
   const stats = {
     totalMotorcycles: motorcycles.length,
-    availableMotorcycles: motorcycles.filter(m => m.status === 'available').length,
-    soldMotorcycles: motorcycles.filter(m => m.status === 'sold').length,
-    pendingMotorcycles: motorcycles.filter(m => m.status === 'pending').length,
+    availableMotorcycles: motorcycles.filter(m => m.status === 'disponível').length,
+    soldMotorcycles: motorcycles.filter(m => m.status === 'vendido').length,
+    pendingMotorcycles: motorcycles.filter(m => m.status === 'pendente').length,
     featuredMotorcycles: motorcycles.filter(m => m.isFeatured).length,
     totalValue: motorcycles.reduce((sum, m) => sum + m.price, 0),
     averagePrice: motorcycles.length > 0 ? motorcycles.reduce((sum, m) => sum + m.price, 0) / motorcycles.length : 0
@@ -147,13 +147,13 @@ const AdminDashboard: React.FC = () => {
         model: motorcycleData.model || '',
         year: motorcycleData.year || new Date().getFullYear(),
         price: motorcycleData.price || 0,
-        condition: motorcycleData.condition || 'New',
-        category: motorcycleData.category || 'Standard',
+        condition: motorcycleData.condition || 'Novo',
+        category: motorcycleData.category || 'Padrão',
         engineSize: motorcycleData.engineSize || 0,
         mileage: motorcycleData.mileage || 0,
         description: motorcycleData.description || '',
         features: motorcycleData.features || [],
-        status: motorcycleData.status || 'available',
+        status: motorcycleData.status || 'disponível',
         images: [],
         isFeatured: motorcycleData.isFeatured || false,
         createdAt: new Date().toISOString(),
@@ -216,13 +216,13 @@ const AdminDashboard: React.FC = () => {
       model: '',
       year: new Date().getFullYear(),
       price: 0,
-      condition: 'New',
-      category: 'Standard',
+      condition: 'Novo',
+      category: 'Padrão',
       engineSize: 0,
       mileage: 0,
       description: '',
       features: [],
-      status: 'available',
+      status: 'disponível',
       images: [],
       isFeatured: false
     });
@@ -244,7 +244,7 @@ const AdminDashboard: React.FC = () => {
 
   // Toggle status
   const toggleStatus = (id: string, currentStatus: string) => {
-    const newStatus = currentStatus === 'available' ? 'sold' : 'available';
+    const newStatus = currentStatus === 'disponível' ? 'vendido' : 'disponível';
     updateMotorcycle(id, { status: newStatus });
   };
 
@@ -268,13 +268,13 @@ const AdminDashboard: React.FC = () => {
       model: 'Motorcycle',
       year: 2024,
       price: 1000,
-      condition: 'New' as const,
-      category: 'Standard' as const,
+      condition: 'Novo' as const,
+      category: 'Padrão' as const,
       engineSize: 100,
       mileage: 0,
       description: 'Test motorcycle',
       features: ['Test Feature'],
-      status: 'available' as const,
+      status: 'disponível' as const,
       images: [],
       isFeatured: false,
       createdAt: new Date().toISOString(),
@@ -418,10 +418,10 @@ const AdminDashboard: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('cover-photos')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === 'cover-photos'
                 ? 'bg-[#e94925] text-white'
-                : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700'
             }`}
           >
             🖼️ Fotos de Capa
@@ -444,20 +444,18 @@ const AdminDashboard: React.FC = () => {
             >
               🏍️ Ver Inventário
             </button>
-            <div className="flex space-x-4">
-              <button
-                onClick={() => addTestMotorcycle()}
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-              >
-                🧪 Test Add
-              </button>
-              <button
-                onClick={() => clearStorage()}
-                className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-              >
-                🗑️ Clear Storage
-              </button>
-            </div>
+            <button
+              onClick={() => addTestMotorcycle()}
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              🧪 Test Add
+            </button>
+            <button
+              onClick={() => clearStorage()}
+              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              🗑️ Clear Storage
+            </button>
             <button
               onClick={() => exportData()}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
@@ -530,7 +528,7 @@ const AdminDashboard: React.FC = () => {
                     <div>
                       <p className="font-medium text-white">{motorcycle.brand} {motorcycle.model}</p>
                       <p className="text-sm text-gray-400">
-                        {motorcycle.status === 'available' ? 'Disponível' : 'Vendida'} • {formatPrice(motorcycle.price)}
+                        {motorcycle.status === 'disponível' ? 'Disponível' : 'Vendida'} • {formatPrice(motorcycle.price)}
                       </p>
                     </div>
                     <div className="flex space-x-2">
@@ -543,12 +541,12 @@ const AdminDashboard: React.FC = () => {
                       <button
                         onClick={() => toggleStatus(motorcycle._id, motorcycle.status)}
                         className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          motorcycle.status === 'available'
+                          motorcycle.status === 'disponível'
                             ? 'bg-green-100 text-green-800'
                             : 'bg-red-100 text-red-800'
                         }`}
                       >
-                        {motorcycle.status === 'available' ? 'Disponível' : 'Vendida'}
+                        {motorcycle.status === 'disponível' ? 'Disponível' : 'Vendida'}
                       </button>
                       <button
                         onClick={() => {
@@ -1142,9 +1140,9 @@ const AdminDashboard: React.FC = () => {
                   className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#e94925]"
                 >
                   <option value="all">Todos os Status</option>
-                  <option value="available">Disponível</option>
-                  <option value="sold">Vendida</option>
-                  <option value="pending">Pendente</option>
+                  <option value="disponível">Disponível</option>
+                  <option value="vendido">Vendida</option>
+                  <option value="pendente">Pendente</option>
                 </select>
 
                 <select
@@ -1226,12 +1224,12 @@ const AdminDashboard: React.FC = () => {
                           <button
                             onClick={() => toggleStatus(motorcycle._id, motorcycle.status)}
                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              motorcycle.status === 'available'
+                              motorcycle.status === 'disponível'
                                 ? 'bg-green-100 text-green-800'
                                 : 'bg-red-100 text-red-800'
                             }`}
                           >
-                            {motorcycle.status === 'available' ? 'Disponível' : 'Vendida'}
+                            {motorcycle.status === 'disponível' ? 'Disponível' : 'Vendida'}
                           </button>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -1253,12 +1251,12 @@ const AdminDashboard: React.FC = () => {
                             <button
                               onClick={() => toggleStatus(motorcycle._id, motorcycle.status)}
                               className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                motorcycle.status === 'available'
+                                motorcycle.status === 'disponível'
                                   ? 'bg-green-100 text-green-800'
                                   : 'bg-red-100 text-red-800'
                               }`}
                             >
-                              {motorcycle.status === 'available' ? 'Disponível' : 'Vendida'}
+                              {motorcycle.status === 'disponível' ? 'Disponível' : 'Vendida'}
                             </button>
                             <button
                               onClick={() => {

@@ -10,10 +10,10 @@ const Navbar: React.FC = () => {
 
   const navigation = [
     { name: 'Início', href: '/' },
-    { name: 'Nosso Estoque', href: '/inventory' },
-    { name: 'Quero Vender', href: '/sell' },
-    { name: 'Sobre', href: '/about' },
-    { name: 'Contato', href: '/contact' },
+    { name: 'Nosso Estoque', href: '/estoque' },
+    { name: 'Quero Vender', href: '/vender' },
+    { name: 'Sobre', href: '/sobre' },
+    { name: 'Contato', href: '/contato' },
   ];
 
   const adminNavigation = [

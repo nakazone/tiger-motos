@@ -26,13 +26,16 @@ const Contact: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 py-16">
-        <div className="bg-gray-900 rounded-lg shadow-lg p-8 border border-gray-800">
-          <h2 className="text-2xl font-bold text-white mb-6">Entre em Contato</h2>
-          
+        {/* Header */}
+        <div className="mb-12">
+          <h1 className="text-5xl font-bold text-white mb-4 text-left">ENTRE EM CONTATO</h1>
+        </div>
+
+        <div className="bg-gray-900 shadow-lg p-8 border border-gray-800">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Contact Information */}
             <div>
-              <h3 className="text-xl font-semibold text-white mb-4">Informações de Contato</h3>
+              <h3 className="text-xl font-semibold text-white mb-4 text-left">Informações de Contato</h3>
               
               <div className="space-y-4">
                 <div className="flex items-start">
@@ -43,8 +46,8 @@ const Contact: React.FC = () => {
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-white">Endereço</p>
-                    <p className="text-sm text-gray-300">Av. Irmãos Adorno, 186<br />Sítio do Campo, Praia Grande</p>
+                    <p className="text-sm font-medium text-white text-left">Endereço</p>
+                    <p className="text-sm text-gray-300 text-left">Av. Irmãos Adorno, 186<br />Sítio do Campo, Praia Grande</p>
                   </div>
                 </div>
                 
@@ -55,8 +58,8 @@ const Contact: React.FC = () => {
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-white">Telefone/WhatsApp</p>
-                    <p className="text-sm text-gray-300">(13) 99103-0606</p>
+                    <p className="text-sm font-medium text-white text-left">Telefone/WhatsApp</p>
+                    <p className="text-sm text-gray-300 text-left">(13) 99103-0606</p>
                   </div>
                 </div>
                 
@@ -67,8 +70,8 @@ const Contact: React.FC = () => {
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-white">Email</p>
-                    <p className="text-sm text-gray-300">contato@tigermotos.com.br</p>
+                    <p className="text-sm font-medium text-white text-left">Email</p>
+                    <p className="text-sm text-gray-300 text-left">contato@tigermotos.com.br</p>
                   </div>
                 </div>
                 
@@ -79,8 +82,8 @@ const Contact: React.FC = () => {
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-white">Horários de Atendimento</p>
-                    <p className="text-sm text-gray-300">
+                    <p className="text-sm font-medium text-white text-left">Horários de Atendimento</p>
+                    <p className="text-sm text-gray-300 text-left">
                       Segunda - Sexta: 9:00 - 19:00<br />
                       Sábado: 9:00 - 16:00
                     </p>
@@ -91,12 +94,12 @@ const Contact: React.FC = () => {
             
             {/* Contact Form */}
             <div>
-              <h3 className="text-xl font-semibold text-white mb-4">Envie-nos uma Mensagem</h3>
+              <h3 className="text-xl font-semibold text-white mb-4 text-left">Envie-nos uma Mensagem</h3>
               
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300">
-                    Nome
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 text-left">
+                    Nome Completo
                   </label>
                   <input
                     type="text"
@@ -105,13 +108,13 @@ const Contact: React.FC = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                     placeholder="Seu nome completo"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 text-left">
                     Email
                   </label>
                   <input
@@ -121,13 +124,13 @@ const Contact: React.FC = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                     placeholder="seu@email.com"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300">
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 text-left">
                     Telefone
                   </label>
                   <input
@@ -136,13 +139,13 @@ const Contact: React.FC = () => {
                     id="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                    className="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                     placeholder="(11) 99999-9999"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-300">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-300 text-left">
                     Assunto
                   </label>
                   <select
@@ -151,7 +154,7 @@ const Contact: React.FC = () => {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-[#e94925]"
+                    className="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-[#e94925]"
                   >
                     <option value="">Selecione um assunto</option>
                     <option value="general">Consulta Geral</option>
@@ -163,7 +166,7 @@ const Contact: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-300">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-300 text-left">
                     Mensagem
                   </label>
                   <textarea
@@ -173,14 +176,14 @@ const Contact: React.FC = () => {
                     value={formData.message}
                     onChange={handleChange}
                     required
-                    className="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925] resize-none"
+                    className="mt-1 block w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925] resize-none"
                     placeholder="Sua mensagem aqui..."
                   />
                 </div>
                 
                 <button
                   type="submit"
-                  className="w-full bg-[#e94925] hover:bg-[#d13d1f] text-white py-3 px-6 rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:ring-offset-2 focus:ring-offset-gray-900"
+                  className="w-full bg-[#e94925] hover:bg-[#d13d1f] text-white py-3 px-6 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[#e94925] focus:ring-offset-2 focus:ring-offset-gray-900"
                 >
                   Enviar Mensagem
                 </button>

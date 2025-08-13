@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Company Info */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
                 className="w-16 h-16 object-contain"
               />
             </div>
-            <p className="text-gray-300 mb-4 max-w-md">
+            <p className="text-gray-300 mb-4 max-w-md text-left">
               Seu parceiro de confiança para motocicletas novas e usadas. Oferecemos uma ampla seleção de 
               motos de qualidade das melhores marcas com atendimento excepcional ao cliente.
             </p>
@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="text-left">
             <h3 className="text-lg font-semibold mb-4">Links</h3>
             <ul className="space-y-2">
               <li>
@@ -55,25 +55,44 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/inventory" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/estoque" className="text-gray-300 hover:text-white transition-colors">
                   Nosso Estoque
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/sobre" className="text-gray-300 hover:text-white transition-colors">
                   Sobre
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/contato" className="text-gray-300 hover:text-white transition-colors">
                   Contato
                 </Link>
               </li>
             </ul>
           </div>
 
+          {/* Business Hours */}
+          <div className="text-left">
+            <h3 className="text-lg font-semibold mb-4">Horários</h3>
+            <div className="space-y-2 text-gray-300">
+              <div>
+                <p className="font-medium">Segunda - Sexta</p>
+                <p>9:00 - 19:00</p>
+              </div>
+              <div>
+                <p className="font-medium">Sábado</p>
+                <p>9:00 - 16:00</p>
+              </div>
+              <div>
+                <p className="font-medium">Domingo</p>
+                <p>Fechado</p>
+              </div>
+            </div>
+          </div>
+
           {/* Contact Info */}
-          <div>
+          <div className="text-left">
             <h3 className="text-lg font-semibold mb-4">Contato</h3>
             <div className="space-y-2 text-gray-300">
               <div className="flex items-start">
@@ -99,13 +118,13 @@ const Footer: React.FC = () => {
                 <img 
                   src="/whatsapp.png" 
                   alt="WhatsApp" 
-                  className="h-5 w-5 mr-2 flex-shrink-0 object-contain"
+                  className="h-5 w-5 mr-2 flex-shrink-0"
                 />
                 <a 
                   href="https://wa.me/5511999999999?text=Olá! Gostaria de saber mais sobre as motos da Tiger Motos."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-300 hover:text-green-400 transition-colors"
+                  className="text-gray-300 hover:text-white transition-colors"
                 >
                   WhatsApp
                 </a>
@@ -114,20 +133,11 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
-              © 2025 Tiger Motos. Todos os direitos reservados.
-            </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <button className="text-gray-400 hover:text-white text-sm transition-colors">
-                Política de Privacidade
-              </button>
-              <button className="text-gray-400 hover:text-white text-sm transition-colors">
-                Termos de Serviço
-              </button>
-            </div>
-          </div>
+        {/* Bottom Section */}
+        <div className="border-t border-gray-700 mt-8 pt-8 text-center">
+          <p className="text-gray-400 text-sm">
+            © 2024 Tiger Motos. Todos os direitos reservados.
+          </p>
         </div>
       </div>
     </footer>

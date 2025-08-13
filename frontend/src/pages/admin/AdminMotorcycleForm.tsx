@@ -8,18 +8,18 @@ const AdminMotorcycleForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [motorcycle, setMotorcycle] = useState<Partial<Motorcycle>>({
+  const [motorcycleData, setMotorcycleData] = useState<Partial<Motorcycle>>({
     brand: '',
     model: '',
     year: new Date().getFullYear(),
     price: 0,
-    condition: 'Good' as const,
-    category: 'Standard' as const,
+    condition: 'Bom' as const,
+    category: 'Padrão' as const,
     engineSize: 0,
     mileage: 0,
     description: '',
     features: [],
-    status: 'available' as const,
+    status: 'disponível' as const,
     images: []
   });
 
@@ -34,7 +34,7 @@ const AdminMotorcycleForm: React.FC = () => {
     try {
       setLoading(true);
       const response = await adminMotorcycleAPI.getById(id!);
-      setMotorcycle(response);
+      setMotorcycleData(response);
     } catch (error) {
       console.error('Error fetching motorcycle:', error);
     } finally {
@@ -44,7 +44,7 @@ const AdminMotorcycleForm: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setMotorcycle(prev => ({
+    setMotorcycleData(prev => ({
       ...prev,
       [name]: name === 'year' || name === 'price' || name === 'engineSize' || name === 'mileage' 
         ? parseInt(value) || 0 
@@ -54,7 +54,7 @@ const AdminMotorcycleForm: React.FC = () => {
 
   const handleFeaturesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const features = e.target.value.split('\n').filter(feature => feature.trim());
-    setMotorcycle(prev => ({
+    setMotorcycleData(prev => ({
       ...prev,
       features
     }));
@@ -66,11 +66,11 @@ const AdminMotorcycleForm: React.FC = () => {
 
     try {
       if (id && id !== 'new') {
-        await adminMotorcycleAPI.update(id, motorcycle);
+        await adminMotorcycleAPI.update(id, motorcycleData);
       } else {
-        await adminMotorcycleAPI.create(motorcycle);
+        await adminMotorcycleAPI.create(motorcycleData);
       }
-      navigate('/admin/inventory');
+      navigate('/admin/estoque');
     } catch (error) {
       console.error('Error saving motorcycle:', error);
     } finally {
@@ -107,7 +107,7 @@ const AdminMotorcycleForm: React.FC = () => {
                   name="brand"
                   id="brand"
                   required
-                  value={motorcycle.brand}
+                  value={motorcycleData.brand}
                   onChange={handleChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 />
@@ -122,7 +122,7 @@ const AdminMotorcycleForm: React.FC = () => {
                   name="model"
                   id="model"
                   required
-                  value={motorcycle.model}
+                  value={motorcycleData.model}
                   onChange={handleChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 />
@@ -139,7 +139,7 @@ const AdminMotorcycleForm: React.FC = () => {
                   required
                   min="1900"
                   max={new Date().getFullYear() + 1}
-                  value={motorcycle.year}
+                  value={motorcycleData.year}
                   onChange={handleChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 />
@@ -156,7 +156,7 @@ const AdminMotorcycleForm: React.FC = () => {
                   required
                   min="0"
                   step="0.01"
-                  value={motorcycle.price}
+                  value={motorcycleData.price}
                   onChange={handleChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 />
@@ -170,14 +170,14 @@ const AdminMotorcycleForm: React.FC = () => {
                   name="condition"
                   id="condition"
                   required
-                  value={motorcycle.condition}
+                  value={motorcycleData.condition}
                   onChange={handleChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 >
-                  <option value="Excellent">Excellent</option>
-                  <option value="Good">Good</option>
-                  <option value="Fair">Fair</option>
-                  <option value="Poor">Poor</option>
+                  <option value="Bom">Bom</option>
+                  <option value="Excelente">Excelente</option>
+                  <option value="Regular">Regular</option>
+                  <option value="Ruim">Ruim</option>
                 </select>
               </div>
 
@@ -189,15 +189,15 @@ const AdminMotorcycleForm: React.FC = () => {
                   name="category"
                   id="category"
                   required
-                  value={motorcycle.category}
+                  value={motorcycleData.category}
                   onChange={handleChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 >
-                  <option value="Sport">Sport</option>
+                  <option value="Esportivo">Esportivo</option>
                   <option value="Cruiser">Cruiser</option>
                   <option value="Touring">Touring</option>
                   <option value="Dual Sport">Dual Sport</option>
-                  <option value="Standard">Standard</option>
+                  <option value="Padrão">Padrão</option>
                 </select>
               </div>
 
@@ -210,7 +210,7 @@ const AdminMotorcycleForm: React.FC = () => {
                   name="engineSize"
                   id="engineSize"
                   min="0"
-                  value={motorcycle.engineSize}
+                  value={motorcycleData.engineSize}
                   onChange={handleChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 />
@@ -225,7 +225,7 @@ const AdminMotorcycleForm: React.FC = () => {
                   name="mileage"
                   id="mileage"
                   min="0"
-                  value={motorcycle.mileage}
+                  value={motorcycleData.mileage}
                   onChange={handleChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 />
@@ -239,13 +239,13 @@ const AdminMotorcycleForm: React.FC = () => {
                   name="status"
                   id="status"
                   required
-                  value={motorcycle.status}
+                  value={motorcycleData.status}
                   onChange={handleChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 >
-                  <option value="available">Available</option>
-                  <option value="sold">Sold</option>
-                  <option value="pending">Pending</option>
+                  <option value="disponível">Disponível</option>
+                  <option value="vendido">Vendido</option>
+                  <option value="pendente">Pendente</option>
                 </select>
               </div>
             </div>
@@ -258,7 +258,7 @@ const AdminMotorcycleForm: React.FC = () => {
                   name="description"
                   id="description"
                   rows={4}
-                  value={motorcycle.description}
+                  value={motorcycleData.description}
                   onChange={handleChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                 />
@@ -272,7 +272,7 @@ const AdminMotorcycleForm: React.FC = () => {
                   name="features"
                   id="features"
                   rows={4}
-                  value={motorcycle.features?.join('\n') || ''}
+                  value={motorcycleData.features?.join('\n') || ''}
                   onChange={handleFeaturesChange}
                   placeholder="ABS Brakes&#10;LED Headlights&#10;Digital Display"
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
@@ -282,7 +282,7 @@ const AdminMotorcycleForm: React.FC = () => {
             <div className="flex justify-end space-x-3">
               <button
                 type="button"
-                onClick={() => navigate('/admin/inventory')}
+                onClick={() => navigate('/admin/estoque')}
                 className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
                 Cancel

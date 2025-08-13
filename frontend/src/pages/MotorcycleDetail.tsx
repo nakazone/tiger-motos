@@ -66,36 +66,33 @@ const MotorcycleDetail: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center space-x-4">
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 py-16">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center space-x-4 mb-6">
             <Link
-              to="/inventory"
+              to="/estoque"
               className="text-[#e94925] hover:text-[#d13d1f] transition-colors"
             >
               ← Voltar ao Inventário
             </Link>
             <span className="text-gray-400">/</span>
-            <span className="text-gray-600">{motorcycle.brand} {motorcycle.model}</span>
+            <span className="text-gray-300">{motorcycle.brand} {motorcycle.model}</span>
           </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto w-full pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 py-16">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            {motorcycle.brand} {motorcycle.model}
-          </h1>
-          <p className="text-xl text-gray-300">{motorcycle.year} • {motorcycle.mileage.toLocaleString()} km</p>
+          
+          <div className="mb-6">
+            <h1 className="text-4xl font-bold text-white mb-2 text-left">
+              {motorcycle.brand} {motorcycle.model}
+            </h1>
+            <p className="text-xl text-gray-300 text-left">{motorcycle.year} • {motorcycle.mileage.toLocaleString()} km</p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Photo Gallery */}
           <div className="lg:col-span-2">
-            <div className="bg-gray-900 rounded-lg overflow-hidden">
+            <div className="bg-gray-900 overflow-hidden">
               {/* Main Image */}
               <div className="relative h-96 bg-gray-800">
                 {motorcycle.images && motorcycle.images.length > 0 ? (
@@ -103,7 +100,7 @@ const MotorcycleDetail: React.FC = () => {
                     <img
                       src={motorcycle.images[currentImageIndex]}
                       alt={`${motorcycle.brand} ${motorcycle.model} - Imagem ${currentImageIndex + 1}`}
-                      className="w-full h-96 object-cover rounded-lg"
+                      className="w-full h-96 object-cover"
                       onLoad={() => {
                         // Image loaded successfully
                       }}
@@ -112,13 +109,13 @@ const MotorcycleDetail: React.FC = () => {
                       <>
                         <button
                           onClick={() => setCurrentImageIndex(prev => prev === 0 ? motorcycle.images.length - 1 : prev - 1)}
-                          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75 transition-all"
+                          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 hover:bg-opacity-75 transition-all"
                         >
                           ‹
                         </button>
                         <button
                           onClick={() => setCurrentImageIndex(prev => prev === motorcycle.images.length - 1 ? 0 : prev + 1)}
-                          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75 transition-all"
+                          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 hover:bg-opacity-75 transition-all"
                         >
                           ›
                         </button>
@@ -143,7 +140,7 @@ const MotorcycleDetail: React.FC = () => {
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all ${
+                      className={`flex-shrink-0 w-24 h-24 overflow-hidden border-2 transition-all ${
                         currentImageIndex === index ? 'border-[#e94925]' : 'border-gray-600 hover:border-gray-500'
                       }`}
                     >
@@ -159,7 +156,7 @@ const MotorcycleDetail: React.FC = () => {
                   ))}
                 </div>
               ) : (
-                <div className="mt-4 p-4 bg-gray-100 rounded-lg text-center">
+                <div className="mt-4 p-4 bg-gray-100 text-center">
                   <p className="text-gray-500 text-sm">
                     📸 Nenhuma foto disponível para esta motocicleta
                   </p>
@@ -171,8 +168,8 @@ const MotorcycleDetail: React.FC = () => {
             </div>
 
             {/* Motorcycle Information */}
-            <div className="bg-gray-900 rounded-lg p-8 mt-8">
-              <h2 className="text-2xl font-bold text-white mb-6">Informações da Moto</h2>
+            <div className="bg-gray-900 p-8 mt-8">
+              <h2 className="text-2xl font-bold text-white mb-6 text-left">Informações da Moto</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div className="space-y-4">
@@ -204,17 +201,17 @@ const MotorcycleDetail: React.FC = () => {
 
               {/* Description */}
               <div className="mb-8">
-                <h3 className="text-xl font-semibold text-white mb-4">Descrição</h3>
-                <p className="text-gray-300 leading-relaxed">{motorcycle.description}</p>
+                <h3 className="text-xl font-semibold text-white mb-4 text-left">Descrição</h3>
+                <p className="text-gray-300 leading-relaxed text-left">{motorcycle.description}</p>
               </div>
 
               {/* Features */}
               <div>
-                <h3 className="text-xl font-semibold text-white mb-4">Características</h3>
+                <h3 className="text-xl font-semibold text-white mb-4 text-left">Características</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {motorcycle.features?.map((feature, index) => (
                     <div key={index} className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-[#e94925] rounded-full"></div>
+                      <div className="w-2 h-2 bg-[#e94925]"></div>
                       <span className="text-gray-300">{feature}</span>
                     </div>
                   ))}
@@ -226,7 +223,7 @@ const MotorcycleDetail: React.FC = () => {
           {/* Right Column - Price, Contact, and Related */}
           <div className="space-y-8">
             {/* Price Card */}
-            <div className="bg-gray-900 rounded-lg p-6">
+            <div className="bg-gray-900 p-6">
               <div className="text-center mb-6">
                 <div className="text-3xl font-bold text-[#e94925] mb-2">
                   {new Intl.NumberFormat('pt-BR', {
@@ -240,7 +237,7 @@ const MotorcycleDetail: React.FC = () => {
               <div className="space-y-4">
                 <button
                   onClick={openWhatsApp}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 font-semibold transition-colors flex items-center justify-center gap-2"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
@@ -250,7 +247,7 @@ const MotorcycleDetail: React.FC = () => {
                 
                 <button
                   onClick={() => setShowWhatsAppChat(!showWhatsAppChat)}
-                  className="w-full bg-[#e94925] hover:bg-[#d13d1f] text-white py-3 px-6 rounded-lg font-semibold transition-colors"
+                  className="w-full bg-[#e94925] hover:bg-[#d13d1f] text-white py-3 px-6 font-semibold transition-colors"
                 >
                   Chat WhatsApp
                 </button>
@@ -258,15 +255,15 @@ const MotorcycleDetail: React.FC = () => {
             </div>
 
             {/* Contact Form */}
-            <div className="bg-gray-900 rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-white mb-4">Enviar Mensagem</h3>
+            <div className="bg-gray-900 p-6">
+              <h3 className="text-xl font-semibold text-white mb-4 text-left">Enviar Mensagem</h3>
               <form onSubmit={handleContactSubmit} className="space-y-4">
                 <input
                   type="text"
                   placeholder="Seu nome"
                   value={contactForm.name}
                   onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                   required
                 />
                 <input
@@ -274,7 +271,7 @@ const MotorcycleDetail: React.FC = () => {
                   placeholder="Seu email"
                   value={contactForm.email}
                   onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                   required
                 />
                 <input
@@ -282,7 +279,7 @@ const MotorcycleDetail: React.FC = () => {
                   placeholder="Seu telefone"
                   value={contactForm.phone}
                   onChange={(e) => setContactForm({...contactForm, phone: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925]"
                   required
                 />
                 <textarea
@@ -290,12 +287,12 @@ const MotorcycleDetail: React.FC = () => {
                   value={contactForm.message}
                   onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
                   rows={4}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925] resize-none"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#e94925] resize-none"
                   required
                 ></textarea>
                 <button
                   type="submit"
-                  className="w-full bg-[#e94925] hover:bg-[#d13d1f] text-white py-3 px-6 rounded-lg font-semibold transition-colors"
+                  className="w-full bg-[#e94925] hover:bg-[#d13d1f] text-white py-3 px-6 font-semibold transition-colors"
                 >
                   Enviar Mensagem
                 </button>
@@ -304,11 +301,11 @@ const MotorcycleDetail: React.FC = () => {
 
             {/* WhatsApp Chat */}
             {showWhatsAppChat && (
-              <div className="bg-gray-900 rounded-lg p-6">
-                <h3 className="text-xl font-semibold text-white mb-4">Chat WhatsApp</h3>
-                <div className="bg-gray-800 rounded-lg p-4 mb-4">
+              <div className="bg-gray-900 p-6">
+                <h3 className="text-xl font-semibold text-white mb-4 text-left">Chat WhatsApp</h3>
+                <div className="bg-gray-800 p-4 mb-4">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
+                    <div className="w-10 h-10 bg-green-600 flex items-center justify-center">
                       <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
                       </svg>
@@ -324,7 +321,7 @@ const MotorcycleDetail: React.FC = () => {
                 </div>
                 <button
                   onClick={openWhatsApp}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 font-semibold transition-colors"
                 >
                   Abrir WhatsApp
                 </button>
@@ -335,10 +332,10 @@ const MotorcycleDetail: React.FC = () => {
 
         {/* Related Products */}
         <div className="mt-16">
-          <h2 className="text-3xl font-bold text-white mb-8">Produtos Relacionados</h2>
+          <h2 className="text-3xl font-bold text-white mb-8 text-left">Produtos Relacionados</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {relatedMotorcycles.map((relatedMoto) => (
-              <div key={relatedMoto._id} className="bg-gray-900 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300">
+              <div key={relatedMoto._id} className="bg-gray-900 overflow-hidden hover:shadow-xl transition-all duration-300">
                 <div className="relative h-48 bg-gray-800">
                   <img
                     src={relatedMoto.images[0]}
@@ -347,10 +344,10 @@ const MotorcycleDetail: React.FC = () => {
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-xl font-semibold text-white mb-2 text-left">
                     {relatedMoto.brand} {relatedMoto.model}
                   </h3>
-                  <p className="text-gray-400 mb-4">{relatedMoto.year} • {relatedMoto.mileage.toLocaleString()} km</p>
+                  <p className="text-gray-400 mb-4 text-left">{relatedMoto.year} • {relatedMoto.mileage.toLocaleString()} km</p>
                   <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold text-[#e94925]">
                       {new Intl.NumberFormat('pt-BR', {
@@ -360,7 +357,7 @@ const MotorcycleDetail: React.FC = () => {
                     </span>
                     <Link
                       to={`/motorcycle/${relatedMoto._id}`}
-                      className="bg-[#e94925] hover:bg-[#d13d1f] text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+                      className="bg-[#e94925] hover:bg-[#d13d1f] text-white px-4 py-2 font-semibold transition-colors"
                     >
                       Ver Detalhes
                     </Link>
