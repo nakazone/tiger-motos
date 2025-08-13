@@ -287,15 +287,28 @@ const Sell: React.FC = () => {
                 <label htmlFor="images" className="block text-sm font-medium text-gray-300 mb-1 text-left">
                   Envie fotos da sua moto (máximo 5 fotos)
                 </label>
-                <input
-                  type="file"
-                  name="images"
-                  id="images"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-[#e94925] file:mr-4 file:py-2 file:px-4 file:text-sm file:font-semibold file:bg-[#e94925] file:text-white hover:file:bg-[#d13d1f] file:cursor-pointer"
-                />
+                <div className="relative">
+                  <input
+                    type="file"
+                    name="images"
+                    id="images"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <div className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white focus-within:border-[#e94925] flex items-center justify-between">
+                    <span className="text-gray-300">
+                      {formData.images.length > 0 
+                        ? `${formData.images.length} arquivo(s) selecionado(s)` 
+                        : 'Nenhum Arquivo Selecionado'
+                      }
+                    </span>
+                    <span className="bg-[#e94925] hover:bg-[#d13d1f] text-white px-4 py-2 text-sm font-semibold transition-colors cursor-pointer">
+                      Selecionar Arquivos
+                    </span>
+                  </div>
+                </div>
                 <p className="text-sm text-gray-400 mt-1 text-left">
                   Formatos aceitos: JPG, PNG. Tamanho máximo: 5MB por foto.
                 </p>
